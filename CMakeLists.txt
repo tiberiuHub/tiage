@@ -1,0 +1,26 @@
+cmake_minimum_required(VERSION 3.18.0)
+include_guard(GLOBAL)
+project(tiage)
+
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)    
+
+set(TARGET ${PROJECT_NAME})
+
+add_library(${TARGET} 
+    STATIC
+        "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Color.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/IAsciiRenderer.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Menu.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/Menu.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Matrix.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Position.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/StdoutRenderer.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/StdoutRenderer.cpp"
+)
+
+target_include_directories(${TARGET}       
+    PUBLIC  
+        "${CMAKE_CURRENT_SOURCE_DIR}/inc"   
+)
