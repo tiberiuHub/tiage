@@ -11,13 +11,14 @@ set(TARGET ${PROJECT_NAME})
 add_library(${TARGET} 
     STATIC
         "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Color.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/IAsciiRenderer.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/IConsole.h"
+		"${CMAKE_CURRENT_SOURCE_DIR}/src/IConsole.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Menu.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/Menu.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Matrix.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Position.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/StdoutRenderer.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/StdoutRenderer.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/WinConsole.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/WinConsole.cpp"
 )
 
 target_include_directories(${TARGET}       

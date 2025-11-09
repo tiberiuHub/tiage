@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "tiage/StdoutRenderer.h"
+#include "tiage/WinConsole.h"
 #include "tiage/Color.h"
 #include <iostream>
 #include <sstream>
@@ -14,84 +14,68 @@ namespace tiage {
 
 // -------------------------------------------------------------------------------------------------
 
-StdoutRenderer::StdoutRenderer(uint32_t width, uint32_t height) :
-	commands_(height, width) {
+WinConsole::WinConsole(uint32_t width, uint32_t height){
+	commands_ = std::make_unique<tiage::Matrix<cmd_t>> (width, height);
+	std::cout << "\033[8;"<< width<<";"<< height <<"t"; 
 }
 
 // -------------------------------------------------------------------------------------------------
 
 void
-StdoutRenderer::beginFrame() {
-	for (uint32_t y = 0; y < commands_.nRows(); y++) {
-		for (uint32_t x = 0; x < commands_.nCols(); x++) {
-			commands_.set(x, y, { Color::White, ' ' }); // x=col, y=row
-		}
-	}
-}
-
-
-// -------------------------------------------------------------------------------------------------
-
-void
-StdoutRenderer::resizeDesiredCanvas(uint32_t width, uint32_t height) {
-	desiredCanvasSize_ = { width,height };
+WinConsole::doDestroy() {
+	FreeConsole();
 }
 
 // -------------------------------------------------------------------------------------------------
 
 void
-StdoutRenderer::resizeCanvas(uint32_t width, uint32_t height) {
-	commands_ = Matrix<cmd_t>(height, width);
+WinConsole::doCreate(uint32_t width, uint32_t height) {
+	AllocConsole();
+
+	FILE* fp;
+	freopen_s(&fp, "CONOUT$", "w", stdout);
+	freopen_s(&fp, "CONOUT$", "w", stderr);
+	freopen_s(&fp, "CONIN$", "r", stdin);
+
 }
 
 // -------------------------------------------------------------------------------------------------
 
 void
-StdoutRenderer::putChar(uint32_t x, uint32_t y, Color color, char c) {
-	if (y < commands_.nCols() && x < commands_.nRows()) {
-		commands_.get(y, x) = { color,c };
-	}
+WinConsole::doPutChar(uint32_t x, uint32_t y, Color color, char c) {
+	commands_->set(x, y, { color,c });
 }
 
 // -------------------------------------------------------------------------------------------------
 
 void
-StdoutRenderer::endFrame() {
-	// ?
-}
-
-// -------------------------------------------------------------------------------------------------
-
-void
-StdoutRenderer::render() {
+WinConsole::doFlush() {
 	std::stringstream frameBuffer;
 
-	fitToConsole();
+	//fitToConsole();
 
 	frameBuffer << "\033[H";
-
-	for (uint32_t y = 0; y < commands_.nRows(); y++) {
-		for (uint32_t x = 0; x < commands_.nCols(); x++) {
-			if (auto command = commands_.get(x, y); command.c != ' ') {
+	for (uint32_t y = 0; y < commands_->nRows(); y++) {
+		for (uint32_t x = 0; x < commands_->nCols(); x++) {
+			if (auto command = commands_->get(x, y); command.c != ' ') {
 				auto code = ansiColorCode(command.color);
-				frameBuffer << code.first << command.c << code.second;
+				//frameBuffer << code.first << command.c << code.second;
+				frameBuffer << command.c;
 			} else {
 				frameBuffer << ' ';
 			}
 		}
-		if (y != commands_.nRows() - 1) {
-			frameBuffer << '\n';
-		}
-		
+		frameBuffer << '\n';
 	}
 
 	std::cout << frameBuffer.str();
+	
 }
 
 // -------------------------------------------------------------------------------------------------
 
 void
-StdoutRenderer::clear() {
+WinConsole::doClear() {
 #ifdef _WIN32
 	std::system("cls");
 #else
@@ -102,36 +86,36 @@ StdoutRenderer::clear() {
 // -------------------------------------------------------------------------------------------------
 
 void
-StdoutRenderer::fitToConsole() {
+WinConsole::fitToConsole() {
 
 	auto currentConsole = getConsoleSize();
 
 	int width = currentConsole.first;
 	int height = currentConsole.second;
 
-	width = std::min(width, desiredCanvasSize_.first);
-	height = std::min(height, desiredCanvasSize_.second);
+	width = std::min(width, static_cast<int>(commands_->nRows()));
+	height = std::min(height, static_cast<int>(commands_->nCols()));
 
-	if (width != commands_.nCols() || height != commands_.nRows()) {
+	if (width != commands_->nCols() || height != commands_->nRows()) {
 		resizeCanvas(width, height);
 		clear();
 	}
 
-	consoleSize_ = currentConsole;
+	currentConsoleSize_ = currentConsole;
 
 }
 
 // -------------------------------------------------------------------------------------------------
 
 void
-StdoutRenderer::setCursorVisible(bool visible) {
+WinConsole::doSetCursorVisible(bool visible) {
 	std::cout << (visible ? "\033[?25h" : "\033[?25l");
 }
 
 // -------------------------------------------------------------------------------------------------
 
 std::pair<int, int>
-StdoutRenderer::getConsoleSize() {
+WinConsole::getConsoleSize() {
 	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (hOut == INVALID_HANDLE_VALUE) {
 		return { 0, 0 };
@@ -146,6 +130,13 @@ StdoutRenderer::getConsoleSize() {
 	SHORT rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
 
 	return { static_cast<int>(cols), static_cast<int>(rows) };
+}
+
+// -------------------------------------------------------------------------------------------------
+
+void
+WinConsole::resizeCanvas(uint32_t width, uint32_t height) {
+	commands_ = std::make_unique<tiage::Matrix<cmd_t>>(width, height);
 }
 
 // -------------------------------------------------------------------------------------------------

@@ -35,6 +35,14 @@ public:
 		return data_[y][x];
 	}
 
+	void set(const T& val) {
+		for (int i = 0; i < rows_; i++) {
+			for (int j = 0; j < cols_; j++) {
+				data_[i][j] = val;
+			}
+		}
+	}
+
 	void set(size_t x, size_t y, const T& val) {
 		checkBounds(x, y);
 		data_[y][x] = val;
