@@ -60,7 +60,7 @@ WinConsole::doFlush() {
 			if (auto command = commands_->get(x, y); command.c != ' ') {
 				auto code = ansiColorCode(command.color);
 				//frameBuffer << code.first << command.c << code.second;
-				frameBuffer << command.c;
+				frameBuffer <<command.c;
 			} else {
 				frameBuffer << ' ';
 			}
