@@ -43,7 +43,7 @@ protected:
 		char c = 0;
 	};
 
-	std::unique_ptr<Matrix<cmd_t>> commands_;
+	Matrix<cmd_t> commands_;
 
 private:
 

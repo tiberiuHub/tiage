@@ -15,7 +15,8 @@ namespace tiage {
 // -------------------------------------------------------------------------------------------------
 
 WinConsole::WinConsole(uint32_t width, uint32_t height){
-	commands_ = std::make_unique<tiage::Matrix<cmd_t>> (width, height);
+	commands_ = tiage::Matrix<cmd_t> (width, height);
+	commands_.set({Color::Brown,'W'});
 	std::cout << "\033[8;"<< width<<";"<< height <<"t"; 
 }
 
@@ -43,7 +44,7 @@ WinConsole::doCreate(uint32_t width, uint32_t height) {
 
 void
 WinConsole::doPutChar(uint32_t x, uint32_t y, Color color, char c) {
-	commands_->set(x, y, { color,c });
+	//commands_->set(x, y, { color,c });
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -55,12 +56,12 @@ WinConsole::doFlush() {
 	//fitToConsole();
 
 	frameBuffer << "\033[H";
-	for (uint32_t y = 0; y < commands_->nRows(); y++) {
-		for (uint32_t x = 0; x < commands_->nCols(); x++) {
-			if (auto command = commands_->get(x, y); command.c != ' ') {
+	for (uint32_t y = 0; y < commands_.nRows(); y++) {
+		for (uint32_t x = 0; x < commands_.nCols(); x++) {
+			if (auto command = commands_.get(x, y); command.c != ' ') {
 				auto code = ansiColorCode(command.color);
-				//frameBuffer << code.first << command.c << code.second;
-				frameBuffer <<command.c;
+				frameBuffer << code.first << command.c << code.second;
+				//frameBuffer <<command.c;
 			} else {
 				frameBuffer << ' ';
 			}
@@ -93,10 +94,10 @@ WinConsole::fitToConsole() {
 	int width = currentConsole.first;
 	int height = currentConsole.second;
 
-	width = std::min(width, static_cast<int>(commands_->nRows()));
-	height = std::min(height, static_cast<int>(commands_->nCols()));
+	width = std::min(width, static_cast<int>(commands_.nRows()));
+	height = std::min(height, static_cast<int>(commands_.nCols()));
 
-	if (width != commands_->nCols() || height != commands_->nRows()) {
+	if (width != commands_.nCols() || height != commands_.nRows()) {
 		resizeCanvas(width, height);
 		clear();
 	}
@@ -136,7 +137,7 @@ WinConsole::getConsoleSize() {
 
 void
 WinConsole::resizeCanvas(uint32_t width, uint32_t height) {
-	commands_ = std::make_unique<tiage::Matrix<cmd_t>>(width, height);
+	commands_ = tiage::Matrix<cmd_t>(width, height);
 }
 
 // -------------------------------------------------------------------------------------------------
