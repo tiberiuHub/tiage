@@ -25,6 +25,15 @@ public:
 		}
 	}
 
+	Matrix() {
+		
+
+		rows_ = 0;
+		cols_ = 0;
+
+		
+	}
+
 	const T& get(size_t x, size_t y) const {
 		checkBounds(x, y);
 		return data_[y][x];  // outer = row = y, inner = col = x

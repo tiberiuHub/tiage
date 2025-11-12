@@ -14,10 +14,8 @@ namespace tiage {
 
 // -------------------------------------------------------------------------------------------------
 
-WinConsole::WinConsole(uint32_t width, uint32_t height){
-	commands_ = tiage::Matrix<cmd_t> (width, height);
-	commands_.set({Color::Brown,'W'});
-	std::cout << "\033[8;"<< width<<";"<< height <<"t"; 
+WinConsole::WinConsole(uint32_t width , uint32_t height) {
+	commands_ = tiage::Matrix <cmd_t>(width, height);
 }
 
 // -------------------------------------------------------------------------------------------------

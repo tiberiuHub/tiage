@@ -11,7 +11,7 @@ namespace tiage {
 
 void 
 IConsole::create(uint32_t width, uint32_t height) {
-	commands_ = std::make_unique<Matrix<cmd_t>>(width, height);
+	commands_ = Matrix<cmd_t>(width, height);
 	doCreate(width, height);
 }
 
@@ -20,7 +20,7 @@ IConsole::create(uint32_t width, uint32_t height) {
 void 
 IConsole::destroy() {
 	doDestroy();
-	commands_ = nullptr;
+	//commands_ = nullptr;
 }
 
 // --------------------------------------------------------------------------------------------------
@@ -34,9 +34,9 @@ IConsole::setCursorVisible(bool visible) {
 
 void 
 IConsole::putChar(uint32_t x, uint32_t y, Color color, char c) {
-	assert(commands_);
-	commands_->set(x, y, { color, c });
-	doPutChar(x, y, color, c);	
+	//assert(commands_);
+	commands_.set(x,y, { color, c });
+	doPutChar(x,y, color, c);	
 }
 
 // --------------------------------------------------------------------------------------------------
@@ -44,16 +44,16 @@ IConsole::putChar(uint32_t x, uint32_t y, Color color, char c) {
 void 
 IConsole::flush() {
 	doFlush();
-	clear();
+	//clear();
 }
 
 // --------------------------------------------------------------------------------------------------
 
 void 
 IConsole::clear() {
-	assert(commands_);
+	//assert(commands_);
 	doClear();
-	commands_->set({});
+	commands_.set({});
 }
 
 // --------------------------------------------------------------------------------------------------
