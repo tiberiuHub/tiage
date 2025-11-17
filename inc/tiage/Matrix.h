@@ -25,6 +25,11 @@ public:
 		}
 	}
 
+	Matrix() {
+		rows_ = 0;
+		cols_ = 0;
+	}
+
 	const T& get(size_t x, size_t y) const {
 		checkBounds(x, y);
 		return data_[y][x];  // outer = row = y, inner = col = x
@@ -43,6 +48,14 @@ public:
 	void set(size_t x, size_t y, T&& val) {
 		checkBounds(x, y);
 		data_[y][x] = std::move(val);
+	}
+
+	void set(const T& val) {
+		for (int i = 0; i < rows_; i++) {
+			for (int j = 0; j < cols_; j++) {
+				data_[i][j] = val;
+			}
+		}
 	}
 
 	size_t nRows() const {
