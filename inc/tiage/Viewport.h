@@ -5,7 +5,7 @@
 namespace tiage {
 
 class Viewport {
-	//Vec2
+    //Vec2
 };
 
 } // tiage
