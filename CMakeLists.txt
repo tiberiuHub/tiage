@@ -11,13 +11,20 @@ set(TARGET ${PROJECT_NAME})
 add_library(${TARGET} 
     STATIC
         "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Color.h"
+<<<<<<< HEAD
 		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Viewport.h"
+=======
+>>>>>>> 52bba59006d4bfb396856dd09f18bb45e4a35ef1
         "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/IConsole.h"
 		"${CMAKE_CURRENT_SOURCE_DIR}/src/IConsole.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Menu.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/Menu.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Matrix.h"
+<<<<<<< HEAD
         "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Vec2.h"
+=======
+        "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Position.h"
+>>>>>>> 52bba59006d4bfb396856dd09f18bb45e4a35ef1
         "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/WinConsole.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/WinConsole.cpp"
 )

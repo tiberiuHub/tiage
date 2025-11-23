@@ -26,8 +26,17 @@ public:
 	}
 
 	Matrix() {
+<<<<<<< HEAD
 		rows_ = 0;
 		cols_ = 0;
+=======
+		
+
+		rows_ = 0;
+		cols_ = 0;
+
+		
+>>>>>>> 52bba59006d4bfb396856dd09f18bb45e4a35ef1
 	}
 
 	const T& get(size_t x, size_t y) const {
@@ -38,6 +47,14 @@ public:
 	T& get(size_t x, size_t y) {
 		checkBounds(x, y);
 		return data_[y][x];
+	}
+
+	void set(const T& val) {
+		for (int i = 0; i < rows_; i++) {
+			for (int j = 0; j < cols_; j++) {
+				data_[i][j] = val;
+			}
+		}
 	}
 
 	void set(size_t x, size_t y, const T& val) {

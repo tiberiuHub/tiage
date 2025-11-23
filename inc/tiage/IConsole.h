@@ -19,6 +19,7 @@ public:
 	void setCursorVisible(bool visible);
 
 	void putChar(uint32_t x, uint32_t y, Color color, char c);
+<<<<<<< HEAD
 
 	void flush();
 
@@ -26,6 +27,13 @@ public:
 
 	void fitToConsole();
 
+=======
+	
+	void flush();
+	
+	void clear();
+
+>>>>>>> 52bba59006d4bfb396856dd09f18bb45e4a35ef1
 protected:
 
 	virtual void doCreate(uint32_t width, uint32_t height) = 0;
@@ -40,15 +48,27 @@ protected:
 
 	virtual void doClear() = 0;
 
+<<<<<<< HEAD
 	virtual void doFitToConsole() = 0;
 
 	struct cmd_t {
 		Color color = Color::White;
 		char c = ' ';
+=======
+	struct cmd_t {
+		Color color = Color::White;
+		char c = 0;
+>>>>>>> 52bba59006d4bfb396856dd09f18bb45e4a35ef1
 	};
 
 	Matrix<cmd_t> commands_;
 
+<<<<<<< HEAD
+=======
+private:
+
+	
+>>>>>>> 52bba59006d4bfb396856dd09f18bb45e4a35ef1
 };
 
 } // tiage
