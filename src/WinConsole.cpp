@@ -14,8 +14,7 @@ namespace tiage {
 
 WinConsole::WinConsole(uint32_t width, uint32_t height) {
     commands_ = Matrix<cmd_t>(width,height);
-    currentConsoleSize_ = { 120,30 };
-    desiredCanvasSize_ = { 120,30 };//placeholders
+    currentConsoleSize_ = { 120,30 };//placeholder
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -42,44 +41,49 @@ WinConsole::doSetCursorVisible(bool visible) {
 
 void 
 WinConsole::doPutChar(uint32_t x, uint32_t y, Color color, char c) {
-    // commands_->set(x, y, { color,c });
+     commands_.set(x, y, { color,c });
 }
 
 // -------------------------------------------------------------------------------------------------
 
 void
 WinConsole::doFlush() {
-    //doClear();
-
     std::stringstream frameBuffer;
 
-    // doFitToConsole();
+    auto consoleSize = getConsoleSize();
+
+    uint32_t rows = commands_.nRows();
+    uint32_t cols = commands_.nCols();
+
+    if (currentConsoleSize_ != consoleSize) {
+        clear();
+    }
+
+    currentConsoleSize_ = consoleSize;
+
+    rows = std::min(consoleSize.y, rows);
+    cols = std::min(consoleSize.x, cols);
 
     frameBuffer << "\033[H";
-    for (uint32_t y = 0; y < commands_.nRows(); y++) {
-        for (uint32_t x = 0; x < commands_.nCols(); x++) {
+    for (uint32_t y = 0; y < rows; y++) {
+        for (uint32_t x = 0; x < cols; x++) {
             auto command = commands_.get(x, y);
             std::pair<std::string, std::string>  code = ansiColorCode(command.color);
             frameBuffer << code.first << command.c << code.second;
         }
-        if (y != commands_.nRows() - 1) {
+        if (y != rows - 1) {
             frameBuffer << '\n';
         }
     }
 
     std::cout << frameBuffer.str();
-    
 }
 
 // -------------------------------------------------------------------------------------------------
 
 void
 WinConsole::doClear() {
-    //#ifdef _WIN32
-    //    std::system("cls");
-    //#else
-    //    std::system("clear");
-    //#endif
+    std::system("cls");
     commands_.set({ Color::White,' ' });
 }
 

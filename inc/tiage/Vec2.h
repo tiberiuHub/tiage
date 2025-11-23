@@ -14,6 +14,14 @@ public:
 
     Vec2() :x(0), y(0) {}
 
+    bool operator==(const Vec2& other) const {
+        return x == other.x && y == other.y;
+    }
+
+    bool operator!=(const Vec2& other) const {
+        return !(*this == other);
+    }
+
 };
 
 } // tiage

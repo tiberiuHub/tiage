@@ -14,7 +14,8 @@ enum class Color {
     Brown,
     Gray,
     Green,
-    DarkGray
+    DarkGray,
+    Blue
 };
 
 /**
@@ -35,6 +36,8 @@ ansiColorCode(Color colorName) {
         return { "\033[32m" ,"\033[0m" };
     case Color::DarkGray:
         return { "\033[38;5;240m", "\033[0m" };
+    case Color::Blue:
+        return {"\033[38;5;27m", "\033[0m"};
     case Color::White:
     default:
         return { "\033[0m" ,"\033[0m" };

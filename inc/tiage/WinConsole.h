@@ -27,9 +27,7 @@ public:
 
 private:
 
-    Vec2<uint32_t> currentConsoleSize_; // not neccesary for functions
-
-    Vec2<uint32_t> desiredCanvasSize_;
+    Vec2<uint32_t> currentConsoleSize_;
 
     Vec2<uint32_t> getConsoleSize() const;
 };
