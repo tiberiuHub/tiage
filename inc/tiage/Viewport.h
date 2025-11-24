@@ -2,23 +2,23 @@
 
 #pragma once
 
-#include <tiage/Vec2.h>
 #include <cstdint>
+#include <tiage/Vec2.h>
 
 namespace tiage {
 
 class Viewport {
+public:
 
-    void move(Vec2<uint32_t> increment) { // no .cpp for now
-        relativeSize.x += increment.x;
-        relativeSize.y += increment.y;
-    }
+    void moveIncrement(Vec2<uint32_t> increment);
+
+    void moveAbsolute(Vec2<uint32_t> absolutePos);
 
 private:
 
-    Vec2 <uint32_t> originPos; // top left pos
+    Vec2<uint32_t> originPos; // top left pos
 
-    Vec2 <uint32_t> relativeSize; // going toward bottom right , relative to originPos
+    Vec2<uint32_t> relativeSize; // going toward bottom right , relative to originPos
 
 };
 
