@@ -12,6 +12,7 @@ add_library(${TARGET}
     STATIC
         "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Color.h"
 		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Viewport.h"
+		"${CMAKE_CURRENT_SOURCE_DIR}/src/Viewport.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/IConsole.h"
 		"${CMAKE_CURRENT_SOURCE_DIR}/src/IConsole.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Menu.h"
