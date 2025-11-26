@@ -45,7 +45,6 @@ protected:
 
     Matrix<cmd_t> commands_;
 
-private:
 };
 
 } // tiage
