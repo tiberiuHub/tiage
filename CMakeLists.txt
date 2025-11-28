@@ -21,6 +21,10 @@ add_library(${TARGET}
         "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Vec2.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/WinConsole.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/WinConsole.cpp"
+		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/WinFileSystem.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/WinFileSystem.cpp"
+		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/IFileSystem.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/IFileSystem.cpp"
 )
 
 target_include_directories(${TARGET}       

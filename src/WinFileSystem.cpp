@@ -14,7 +14,7 @@ std::vector<std::string>
 WinFileSystem::doGetFolderChildren(const std::string& folderPath, const std::string& fileExtension) {
 	std::vector<std::string> children;
 	for (const auto& entry : std::filesystem::directory_iterator(folderPath)) {
-		if (entry.is_regular_file() && entry.path().extension() == fileExtension) {
+		if (entry.is_regular_file() && entry.path().extension() == ('.' + fileExtension)) {
 			children.push_back(entry.path().filename().string());
 		}
 	}
