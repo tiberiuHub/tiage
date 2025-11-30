@@ -9,10 +9,9 @@ namespace tiage {
 
 // --------------------------------------------------------------------------------------------------
 
-void 
-IConsole::create(uint32_t width, uint32_t height) {
-    commands_ = Matrix<cmd_t>(width, height);
-    doCreate(width, height);
+bool
+IConsole::create(uint64_t createOptions) {
+    return doCreate(createOptions);
 }
 
 // --------------------------------------------------------------------------------------------------
@@ -20,7 +19,20 @@ IConsole::create(uint32_t width, uint32_t height) {
 void 
 IConsole::destroy() {
     doDestroy();
-    //commands_ = nullptr;
+}
+
+// --------------------------------------------------------------------------------------------------
+
+void
+IConsole::setTitle(const char* title) {
+    doSetTitle(title);
+}
+
+// --------------------------------------------------------------------------------------------------
+
+void
+IConsole::move(std::optional<tiage::V2i32> maybePos, std::optional<tiage::V2i32> maybeSize) {
+    doMove(maybePos, maybeSize);
 }
 
 // --------------------------------------------------------------------------------------------------

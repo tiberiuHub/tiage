@@ -5,17 +5,46 @@
 #include <utility>
 #include <tiage/IConsole.h>
 #include <tiage/Vec2.h>
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
 
 namespace tiage {
 
-class WinConsole : public IConsole {
+class WinConsole final : public IConsole {
 public:
+    
+    enum win_in_create_options_t : uint64_t {
+        EnableProcessedInput = 0x0001llu << 20,
+        EnableLineInput = 0x0002llu << 20,
+        EnableEchoInput = 0x0004llu << 20,
+        EnableWindowInput = 0x0008llu << 20,
+        EnableMouseInput = 0x0010llu << 20,
+        EnableInsertMode = 0x0020llu << 20,
+        EnableQuickEditMode = 0x0040llu << 20,
+        EnableExtendedFlags = 0x0080llu << 20,
+        EnableAutoPosition = 0x0100llu << 20,
+        EnableVirtualTerminalInput = 0x0200llu <<20
+    };
+    
+    enum win_out_create_options_t : uint64_t {
+        EnableProcessedOutput = 0x0001llu << 40,
+        EnableWrapAtEolOutput = 0x0002llu << 40,
+        EnableVirtualTerminalProcessing = 0x0004llu << 40,
+        DisableNewlineAutoReturn = 0x0008llu << 40,
+        EnableLvbGridWorldwide = 0x0010llu <<40
+    };
 
-    WinConsole(uint32_t width, uint32_t height);
+    static constexpr uint64_t kWinDefaultCreateOptions = 0;
 
-    void doCreate(uint32_t width, uint32_t height) override;
+private:
+
+    bool doCreate(uint64_t createOptions) override;
 
     void doDestroy() override;
+
+    void doSetTitle(const char* title) override;
+
+    void doMove(std::optional<tiage::V2i32> maybePos, std::optional<tiage::V2i32> maybeSize);
 
     void doSetCursorVisible(bool visible) override;
 
@@ -25,11 +54,15 @@ public:
 
     void doClear() override;
 
-private:
-
     Vec2<uint32_t> currentConsoleSize_;
 
     Vec2<uint32_t> getConsoleSize() const;
+
+    HWND winHandle_ = NULL;
+
+    HANDLE inHandle_ = INVALID_HANDLE_VALUE;
+
+    HANDLE outHandle_ = INVALID_HANDLE_VALUE;
 };
 
 } // tiage

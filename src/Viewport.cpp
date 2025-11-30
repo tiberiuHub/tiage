@@ -15,32 +15,28 @@ Viewport::Viewport(Vec2<uint32_t> originPos, Vec2<uint32_t> size) :
 
 void 
 Viewport::moveIncrement(Vec2<uint32_t> increment) { // no .cpp for now
-    originPos_.x += increment.x;
-    originPos_.y += increment.y;
+    originPos_ += increment;
 }
 
 // -------------------------------------------------------------------------------------------------
 
 void
 Viewport::moveAbsolute(Vec2<uint32_t> absolutePos) { // no .cpp for now
-    originPos_.x = absolutePos.x;
-    originPos_.y = absolutePos.y;
+    originPos_ = absolutePos;
 }
 
 // -------------------------------------------------------------------------------------------------
 
 void
 Viewport::resizeIncrement(Vec2<uint32_t> increment) { // no .cpp for now
-    size_.x += increment.x;
-    size_.y += increment.y;
+    size_ += increment;
 }
 
 // -------------------------------------------------------------------------------------------------
 
 void
 Viewport::resizeAbsolute(Vec2<uint32_t> absolutePos) { // no .cpp for now
-    size_.x = absolutePos.x;
-    size_.y = absolutePos.y;
+    size_ = absolutePos;
 }
 
 // -------------------------------------------------------------------------------------------------
