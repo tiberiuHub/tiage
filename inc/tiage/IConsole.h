@@ -56,6 +56,8 @@ public:
     
     void clear();
 
+    std::string getHostProcess();
+
 protected:
 
     virtual bool doCreate(uint64_t createOptions) = 0;
@@ -74,6 +76,8 @@ protected:
     virtual void doFlush() = 0;
 
     virtual void doClear() = 0;
+
+    virtual std::string doGetHostProcess() = 0;
 
     struct cmd_t {
         Color color = Color::White;

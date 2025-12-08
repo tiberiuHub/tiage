@@ -54,11 +54,13 @@ private:
 
     void doClear() override;
 
+    std::string doGetHostProcess() override;
+
     Vec2<uint32_t> currentConsoleSize_;
 
     Vec2<uint32_t> getConsoleSize() const;
 
-    HWND winHandle_ = NULL;
+    HWND winHandle_ = GetConsoleWindow();
 
     HANDLE inHandle_ = INVALID_HANDLE_VALUE;
 

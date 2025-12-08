@@ -7,6 +7,7 @@
 #include <sstream>
 #define NOMINMAX
 #include <Windows.h>
+#include <tlhelp32.h>
 #include <algorithm>
 
 
@@ -117,13 +118,14 @@ WinConsole::doMove(std::optional<tiage::V2i32> maybePos, std::optional<tiage::V2
     if (maybePos) {
         if (!SetWindowPos(winHandle_, 0, maybePos->x(), maybePos->y(), 0, 0,
                           SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE)) {
+            std::cout << GetLastError();
             assert(0);
             return;
          }
     }
     if (maybeSize) {
         CONSOLE_SCREEN_BUFFER_INFOEX sbi = { sizeof(CONSOLE_SCREEN_BUFFER_INFOEX) };
-        GetConsoleScreenBufferInfoEx(outHandle_, &sbi);
+        //GetConsoleScreenBufferInfoEx(outHandle_, &sbi);
         if (!GetConsoleScreenBufferInfoEx(outHandle_, &sbi)) {
             assert(0);
         }
@@ -194,6 +196,20 @@ void
 WinConsole::doClear() {
     std::system("cls");
     commands_.set({ Color::White,' ' });
+}
+
+// -------------------------------------------------------------------------------------------------
+
+std::string
+WinConsole::doGetHostProcess() {
+    RECT rect;
+    GetWindowRect(winHandle_, &rect);
+    if (SetWindowPos(winHandle_, 0, rect.left, rect.top, 0, 0,
+        SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE)) {
+        return "conhost";
+    } else {
+        return "cmd";
+    }
 }
 
 // -------------------------------------------------------------------------------------------------
