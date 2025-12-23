@@ -11,6 +11,7 @@ set(TARGET ${PROJECT_NAME})
 add_library(${TARGET} 
     STATIC
         "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Color.h"
+		"${CMAKE_CURRENT_SOURCE_DIR}/src/Color.cpp"
 		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Viewport.h"
 		"${CMAKE_CURRENT_SOURCE_DIR}/src/Viewport.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/IConsole.h"
@@ -25,6 +26,10 @@ add_library(${TARGET}
         "${CMAKE_CURRENT_SOURCE_DIR}/src/WinFileSystem.cpp"
 		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/IFileSystem.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/IFileSystem.cpp"
+		"${CMAKE_CURRENT_SOURCE_DIR}/src/Renderer.cpp"
+		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Renderer.h"
+		"${CMAKE_CURRENT_SOURCE_DIR}/src/DrawableChar.cpp"
+		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/DrawableChar.h"
 )
 
 target_include_directories(${TARGET}       
