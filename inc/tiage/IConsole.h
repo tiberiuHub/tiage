@@ -5,6 +5,7 @@
 #include <tiage/Color.h>
 #include <tiage/Matrix.h>
 #include <tiage/Vec2.h>
+#include "tiage/DrawableChar.h"
 #include <optional>
 
 namespace tiage {
@@ -50,9 +51,9 @@ public:
 
     void setCursorVisible(bool visible);
 
-    void putChar(uint32_t x, uint32_t y, Color color, char c);
+    void putChar(uint32_t x, uint32_t y,const DrawableChar& ch);
 
-    void flush();
+    void flush(const V2i32& offset = {0,0});
     
     void clear();
 
@@ -71,20 +72,15 @@ protected:
 
     virtual void doSetCursorVisible(bool visible) = 0;
 
-    virtual void doPutChar(uint32_t x, uint32_t y, Color color, char c) = 0;
+    virtual void doPutChar(uint32_t x, uint32_t y,const DrawableChar& ch) = 0;
 
-    virtual void doFlush() = 0;
+    virtual void doFlush(const V2i32& offset) = 0;
 
     virtual void doClear() = 0;
 
     virtual std::string doGetHostProcess() = 0;
 
-    struct cmd_t {
-        Color color = Color::White;
-        char c = ' ';
-    };
-
-    Matrix<cmd_t> commands_;
+    Matrix<DrawableChar> buffer_;
 
 };
 

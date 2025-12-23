@@ -5,6 +5,7 @@
 #include <utility>
 #include <tiage/IConsole.h>
 #include <tiage/Vec2.h>
+#include "tiage/DrawableChar.h"
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
@@ -44,17 +45,19 @@ private:
 
     void doSetTitle(const char* title) override;
 
-    void doMove(std::optional<tiage::V2i32> maybePos, std::optional<tiage::V2i32> maybeSize);
+    void doMove(std::optional<tiage::V2i32> maybePos, std::optional<tiage::V2i32> maybeSize) override;
 
     void doSetCursorVisible(bool visible) override;
 
-    void doPutChar(uint32_t x, uint32_t y, Color color, char c) override;
+    void doPutChar(uint32_t x, uint32_t y,const DrawableChar& ch) override;
 
-    void doFlush() override;
+    void doFlush(const V2i32& offset) override;
 
     void doClear() override;
 
     std::string doGetHostProcess() override;
+
+    std::string cursorMoveCode(const V2u32& pos) const;
 
     Vec2<uint32_t> currentConsoleSize_;
 
