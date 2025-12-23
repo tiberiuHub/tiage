@@ -45,16 +45,16 @@ IConsole::setCursorVisible(bool visible) {
 // -------------------------------------------------------------------------------------------------
 
 void
-IConsole::putChar(uint32_t x, uint32_t y, Color color, char c) {
-    doPutChar(x, y, color, c);
+IConsole::putChar(uint32_t x, uint32_t y, const DrawableChar& ch) {
+    doPutChar(x, y, ch);
 }
 
 
 // -------------------------------------------------------------------------------------------------
 
 void
-IConsole::flush() {
-    doFlush();
+IConsole::flush(const V2i32& offset) {
+    doFlush(offset);
 }
 
 // -------------------------------------------------------------------------------------------------
