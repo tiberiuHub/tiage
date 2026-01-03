@@ -9,7 +9,11 @@ namespace tiage {
 class DrawableChar {
 public:
 
+	static const DrawableChar kDefault;
+
 	DrawableChar(char c = ' ', const Color& fg = Color::kWhite, const Color& bg = Color::kBlack);
+
+	bool operator== (const DrawableChar& other) const;
 
 	void setC(char c);
 
@@ -22,6 +26,8 @@ public:
 	Color bg() const;
 
 	Color fg() const;
+
+
 
 private:
 	

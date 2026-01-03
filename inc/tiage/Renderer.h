@@ -1,33 +1,58 @@
-// Copyright Tiberiu 2025
+	// Copyright Tiberiu 2025
 
-#pragma once
+	#pragma once
 
-#include "tiage/Color.h"
+	#include "tiage/IConsole.h"
+	#include "tiage/Matrix.h"
+	#include "tiage/Sprite.h"
 
-namespace tiage {
+	namespace tiage {
 
-class DrawableChar {
-public:
+	class Renderer {
+	public:
 
-	DrawableChar(char c = ' ', const Color& fg = Color::kWhite, const Color& bg = Color::kBlack);
+		Renderer(V2i32 bufrSize);
 
-	void setC(char c);
+		void clear();
 
-	void setFG(const Color& fg);
+		void clearLayer(int layer);
 
-	void setBG(const Color& bg);
+		void setLayer(int layer);
 
-	char c() const;
+		int addLayer(int zOrder);//return assigned layer id
 
-	Color bg() const;
+		void drawSquare(const V2i32& pos, const V2i32& size, bool filled = false, const DrawableChar& chr);
 
-	Color fg() const;
+		void drawSprite(const V2i32& pos, const Sprite& sprite);
 
-private:
-	
-	char c_;
-	Color fg_;
-	Color bg_;
-};
+		void drawLine(const DrawableChar& chr ,const V2i32& p1, const V2i32& p2);
 
-} // tiage
+		void drawTriangle(const V2i32& p1, const V2i32& p2, const V2i32& p3, const DrawableChar& chr, bool filled = false);
+
+		//void drawPolygon(const std::vector<V2i32>& points, const DrawableChar& chr, bool filled = false);
+
+		void present(IConsole& console, const V2i32& offset = {0,0});
+
+	private:
+
+		struct Layer {
+			int ID;
+			int zOrder;
+			Matrix<DrawableChar> data;
+		};
+
+		bool zOrderExists(int zOrder);
+
+		void sortLayers();
+
+		DrawableChar getTopmostChr(const V2i32& pos);
+
+		Vec2<size_t> layerSize;
+		
+		int currentLayer;
+
+		std::vector<Layer> layers;
+
+	};
+
+	} // tiage

@@ -6,10 +6,23 @@ namespace tiage {
 
 // --------------------------------------------------------------------------------------------------
 
+const DrawableChar kDefault = { ' ' , Color::kWhite, Color::kBlack };
+
+// --------------------------------------------------------------------------------------------------
+
 DrawableChar::DrawableChar(char c, const Color& fg, const Color& bg) :
 	c_(c),
 	fg_(fg),
 	bg_(bg) {
+}
+
+// --------------------------------------------------------------------------------------------------
+
+bool 
+DrawableChar::operator== (const DrawableChar& other) const {
+	return	this->c_ == other.c_ ||
+			this->fg_ == other.fg_ || 
+			this->bg_ == other.bg_;
 }
 
 // --------------------------------------------------------------------------------------------------

@@ -11,7 +11,7 @@ namespace tiage {
 class Color {
 public:
 
-	static const Color kWhite;
+	static const Color kWhite;	
 	static const Color kBlack;
 	static const Color kNeonRed;
 	static const Color kRed;
