@@ -11,27 +11,27 @@
 	class Renderer {
 	public:
 
-		Renderer(V2i32 bufrSize);
+		Renderer(Vec2<size_t> bufrSize);
 
 		void clear();
 
-		void clearLayer(int layer);
+		void present(IConsole& console, const V2i32& offset = { 0,0 });
 
-		void setLayer(int layer);
+		void clearLayer(uint32_t layerID);
+
+		void setLayer(uint32_t layerID);
 
 		int addLayer(int zOrder);//return assigned layer id
 
-		void drawSquare(const V2i32& pos, const V2i32& size, bool filled = false, const DrawableChar& chr);
-
-		void drawSprite(const V2i32& pos, const Sprite& sprite);
-
-		void drawLine(const DrawableChar& chr ,const V2i32& p1, const V2i32& p2);
+		void drawLine(const DrawableChar& chr, const V2i32& p1, const V2i32& p2);
 
 		void drawTriangle(const V2i32& p1, const V2i32& p2, const V2i32& p3, const DrawableChar& chr, bool filled = false);
 
-		//void drawPolygon(const std::vector<V2i32>& points, const DrawableChar& chr, bool filled = false);
+		void drawSquare(const V2i32& pos, const V2i32& size, const DrawableChar& chr, bool filled = false);
 
-		void present(IConsole& console, const V2i32& offset = {0,0});
+		void drawCircle(const V2i32& origin, uint32_t radius, bool filled = false);
+
+		void drawSprite(const V2i32& pos, const Sprite& sprite);
 
 	private:
 
@@ -47,9 +47,11 @@
 
 		DrawableChar getTopmostChr(const V2i32& pos);
 
+		Layer& getLayerByID(int layerID);
+
 		Vec2<size_t> layerSize;
 		
-		int currentLayer;
+		uint32_t currentLayerID;
 
 		std::vector<Layer> layers;
 

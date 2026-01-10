@@ -7,9 +7,11 @@ namespace tiage {
 
 // --------------------------------------------------------------------------------------------------
 
-Renderer::Renderer(V2i32 bufrSize) {
-	layerSize = { bufrSize.x(),bufrSize.y() };
-	currentLayer = 0;
+Renderer::Renderer(Vec2<size_t> bufrSize) {
+	auto x = bufrSize.x();
+	auto y = bufrSize.y();
+	layerSize = { x, y };
+	currentLayerID = 0;
 }
 
 // --------------------------------------------------------------------------------------------------
@@ -24,18 +26,18 @@ Renderer::clear() {
 // --------------------------------------------------------------------------------------------------
 
 void
-Renderer::clearLayer(int layer) {
-	layers[layer].data.set(DrawableChar::kDefault);
+Renderer::clearLayer(uint32_t layerID) {
+	layers[layerID].data.set(DrawableChar::kDefault);
 }
 
 // --------------------------------------------------------------------------------------------------
 
-void 
+void
 Renderer::drawSquare(
 	const V2i32& pos,
 	const V2i32& size,
-	bool filled,
-	const DrawableChar& chr) {
+	const DrawableChar& chr,
+	bool filled) {
 	for (int x = 0; x < size.x(); x++) {
 		for (int y = 0; y < size.y(); y++) {
 
@@ -49,7 +51,7 @@ Renderer::drawSquare(
 			}
 
 			if (filled || border) {
-				layers[currentLayer].data.set(
+				getLayerByID(currentLayerID).data.set(
 					pos.x() + x,
 					pos.y() + y,
 					chr
@@ -75,7 +77,7 @@ Renderer::drawSprite(const V2i32& pos, const Sprite& sprite) {
 			}
 
 			if (ch != DrawableChar::kDefault) {
-				layers[currentLayer].data.set(
+				getLayerByID(currentLayerID).data.set(
 					pos.x() + x,
 					pos.y() + y,
 					ch
@@ -102,11 +104,11 @@ Renderer::drawLine(const DrawableChar& chr, const V2i32& p1, const V2i32& p2) {
 
 	while (true) {
 
-		if (x0 > layerSize.x() ||y0 > layerSize.y()) {
+		if (x0 > layerSize.x() || y0 > layerSize.y()) {
 			break;
 		}
 
-		layers[currentLayer].data.set(x0, y0, chr);
+		getLayerByID(currentLayerID).data.set(x0, y0, chr);
 
 		if (x0 == x1 && y0 == y1) {
 			break;
@@ -126,7 +128,7 @@ Renderer::drawLine(const DrawableChar& chr, const V2i32& p1, const V2i32& p2) {
 
 // --------------------------------------------------------------------------------------------------
 
-void 
+void
 Renderer::drawTriangle(
 	const V2i32& p1,
 	const V2i32& p2,
@@ -160,7 +162,7 @@ Renderer::drawTriangle(
 		if (x1 > x2) std::swap(x1, x2);
 
 		for (int x = x1; x <= x2; ++x) {
-			layers[currentLayer].data.set(x, y, chr);
+			getLayerByID(currentLayerID).data.set(x, y, chr);
 		}
 	}
 
@@ -170,7 +172,7 @@ Renderer::drawTriangle(
 		if (x1 > x2) std::swap(x1, x2);
 
 		for (int x = x1; x <= x2; ++x) {
-			layers[currentLayer].data.set(x, y, chr);
+			getLayerByID(currentLayerID).data.set(x, y, chr);
 		}
 	}
 }
@@ -178,13 +180,25 @@ Renderer::drawTriangle(
 // --------------------------------------------------------------------------------------------------
 
 void
-Renderer::setLayer(int layer) {
-	if (layer < 0 || layer >= static_cast<int>(layers.size())) {
+Renderer::setLayer(uint32_t layerID) {
+	if (layerID < 0 || layerID >= static_cast<int>(layers.size())) {
 		throw std::out_of_range("Invalid layer index");
 	}
+	currentLayerID = layerID;
 }
 
 // --------------------------------------------------------------------------------------------------
+
+void
+Renderer::drawCircle(const V2i32& origin, uint32_t radius, bool filled) {
+	if (radius == 0) {
+		return;
+	}
+
+}
+
+// --------------------------------------------------------------------------------------------------
+
 
 int
 Renderer::addLayer(int zOrder) {
@@ -227,7 +241,7 @@ Renderer::zOrderExists(int zOrder) {
 
 // --------------------------------------------------------------------------------------------------
 
-void 
+void
 Renderer::sortLayers() {
 	std::sort(layers.begin(), layers.end(),
 		[](const Layer& a, const Layer& b) {
@@ -246,6 +260,18 @@ Renderer::getTopmostChr(const V2i32& pos) {
 		}
 	}
 	return topmost;
+}
+
+// --------------------------------------------------------------------------------------------------
+
+Renderer::Layer&
+Renderer::getLayerByID(int layerID) {
+	for (auto& layer : layers) {
+		if (layer.ID == layerID) {
+			return layer;
+		}
+	}
+	throw std::out_of_range("ID not found");
 }
 
 // --------------------------------------------------------------------------------------------------

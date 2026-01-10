@@ -32,8 +32,8 @@ add_library(${TARGET}
         "${CMAKE_CURRENT_SOURCE_DIR}/src/WinFileSystem.cpp"
 		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/IFileSystem.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/IFileSystem.cpp"
-		"${CMAKE_CURRENT_SOURCE_DIR}/src/Renderer.cpp"
 		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Renderer.h"
+		"${CMAKE_CURRENT_SOURCE_DIR}/src/Renderer.cpp"
 		"${CMAKE_CURRENT_SOURCE_DIR}/src/DrawableChar.cpp"
 		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/DrawableChar.h"
 )

@@ -6,7 +6,7 @@ namespace tiage {
 
 // --------------------------------------------------------------------------------------------------
 
-const DrawableChar kDefault = { ' ' , Color::kWhite, Color::kBlack };
+const DrawableChar DrawableChar::kDefault = { ' ' , Color::kWhite, Color::kBlack };
 
 // --------------------------------------------------------------------------------------------------
 
