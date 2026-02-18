@@ -31,8 +31,15 @@ IConsole::setTitle(const char* title) {
 // --------------------------------------------------------------------------------------------------
 
 void
-IConsole::move(std::optional<tiage::V2i32> maybePos, std::optional<tiage::V2i32> maybeSize) {
+IConsole::move(std::optional<tiage::V2i32> maybePos, std::optional<Vec2<size_t>> maybeSize) {
     doMove(maybePos, maybeSize);
+}
+
+// --------------------------------------------------------------------------------------------------
+
+void
+IConsole::resizeFont(size_t fontSize) {
+    doResizeFont(fontSize);
 }
 
 // --------------------------------------------------------------------------------------------------

@@ -13,7 +13,9 @@ namespace tiage {
 
 class WinConsole final : public IConsole {
 public:
-    
+
+    WinConsole(Vec2<size_t> bufferSize);
+
     enum win_in_create_options_t : uint64_t {
         EnableProcessedInput = 0x0001llu << 20,
         EnableLineInput = 0x0002llu << 20,
@@ -45,7 +47,9 @@ private:
 
     void doSetTitle(const char* title) override;
 
-    void doMove(std::optional<tiage::V2i32> maybePos, std::optional<tiage::V2i32> maybeSize) override;
+    void doMove(std::optional<tiage::V2i32> maybePos, std::optional<Vec2<size_t>> maybeSize) override;
+
+    void doResizeFont(size_t fontSize) override;
 
     void doSetCursorVisible(bool visible) override;
 
@@ -63,7 +67,7 @@ private:
 
     Vec2<uint32_t> getConsoleSize() const;
 
-    HWND winHandle_ = GetConsoleWindow();
+    HWND winHandle_ = nullptr;
 
     HANDLE inHandle_ = INVALID_HANDLE_VALUE;
 

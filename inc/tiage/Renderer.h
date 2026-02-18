@@ -1,60 +1,65 @@
-	// Copyright Tiberiu 2025
+// Copyright Tiberiu 2025
 
-	#pragma once
+#pragma once
 
-	#include "tiage/IConsole.h"
-	#include "tiage/Matrix.h"
-	#include "tiage/Sprite.h"
+#include "tiage/IConsole.h"
+#include "tiage/Matrix.h"
+#include "tiage/Sprite.h"
+#include <cmath>
 
-	namespace tiage {
+namespace tiage {
 
-	class Renderer {
-	public:
+class Renderer {
+public:
 
-		Renderer(Vec2<size_t> bufrSize);
+	Renderer(Vec2<size_t> bufrSize);
 
-		void clear();
+	void clear();
 
-		void present(IConsole& console, const V2i32& offset = { 0,0 });
+	void present(IConsole& console, const V2i32& offset = { 0,0 });
 
-		void clearLayer(uint32_t layerID);
+	void clearLayer(uint32_t layerID);
 
-		void setLayer(uint32_t layerID);
+	void setLayer(uint32_t layerID);
 
-		int addLayer(int zOrder);//return assigned layer id
+	int addLayer(int zOrder);//return assigned layer id
 
-		void drawLine(const DrawableChar& chr, const V2i32& p1, const V2i32& p2);
+	void drawChar(const Vec2<size_t>& pos, const DrawableChar& chr);
 
-		void drawTriangle(const V2i32& p1, const V2i32& p2, const V2i32& p3, const DrawableChar& chr, bool filled = false);
+	void drawLine(const DrawableChar& chr, const V2i32& p1, const V2i32& p2);
 
-		void drawSquare(const V2i32& pos, const V2i32& size, const DrawableChar& chr, bool filled = false);
+	void drawTriangle(const DrawableChar& chr, const V2i32& p1, const V2i32& p2, const V2i32& p3, bool filled = false);
 
-		void drawCircle(const V2i32& origin, uint32_t radius, bool filled = false);
+	void drawRect(const DrawableChar& chr, const V2i32& pos, const V2i32& size, bool filled = false);
 
-		void drawSprite(const V2i32& pos, const Sprite& sprite);
+	void drawCircle(const DrawableChar& chr, const V2i32& origin, uint32_t radius, bool filled = false);
 
-	private:
+	void drawString(const V2i32& pos, const std::string& string, Color foregCol, Color backgCol);
 
-		struct Layer {
-			int ID;
-			int zOrder;
-			Matrix<DrawableChar> data;
-		};
+	void drawSprite(const V2i32& pos, const Sprite& sprite);
 
-		bool zOrderExists(int zOrder);
+private:
 
-		void sortLayers();
-
-		DrawableChar getTopmostChr(const V2i32& pos);
-
-		Layer& getLayerByID(int layerID);
-
-		Vec2<size_t> layerSize;
-		
-		uint32_t currentLayerID;
-
-		std::vector<Layer> layers;
-
+	struct Layer {
+		int ID;
+		int zOrder;
+		Matrix<DrawableChar> data;
 	};
 
-	} // tiage
+	bool zOrderExists(int zOrder);
+
+	void sortLayers();
+
+	DrawableChar getTopmostChr(const Vec2<size_t>& pos);
+
+	Layer& getLayerByID(int layerID);
+
+	Vec2<size_t> layerSize;
+
+	uint32_t currentLayerID;
+
+	std::vector<Layer> layers;
+
+};
+
+} // tiage

@@ -10,14 +10,9 @@ template<typename T>
 class Vec2 {
 public:
 
-    Vec2(T x, T y) :
+    Vec2(T x = 0, T y = 0) :
         x_(x), 
         y_(y) {
-    }
-
-    Vec2() :
-        x_(0), 
-        y_(0) {
     }
 
     void setX(T x) {
@@ -54,6 +49,10 @@ public:
         x_ -= other.x_;
         y_ -= other.y_;
         return *this;
+    }
+
+    Vec2& operator-() {
+        return Vec2(-x_, -y_);
     }
 
     friend Vec2 operator+(const Vec2& lhs, const Vec2& rhs) {

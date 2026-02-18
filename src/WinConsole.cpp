@@ -15,6 +15,12 @@ namespace tiage {
 
 // -------------------------------------------------------------------------------------------------
 
+WinConsole::WinConsole(Vec2<size_t> bufferSize) {
+	buffer_ = Matrix<DrawableChar>({ bufferSize.x(),bufferSize.y()});
+}
+
+// -------------------------------------------------------------------------------------------------
+
 bool
 WinConsole::doCreate(uint64_t createOptions) {
 	FreeConsole();
@@ -88,8 +94,7 @@ WinConsole::doCreate(uint64_t createOptions) {
 	}
 
 	system("cls");
-
-	buffer_ = Matrix<DrawableChar>(50, 50);
+	winHandle_ = GetConsoleWindow();
 
 	return true;
 }
@@ -116,7 +121,7 @@ WinConsole::doSetTitle(const char* title) {
 // -------------------------------------------------------------------------------------------------
 
 void
-WinConsole::doMove(std::optional<tiage::V2i32> maybePos, std::optional<tiage::V2i32> maybeSize) {
+WinConsole::doMove(std::optional<tiage::V2i32> maybePos, std::optional<Vec2<size_t>> maybeSize) {
 	if (maybePos) {
 		if (!SetWindowPos(winHandle_, 0, maybePos->x(), maybePos->y(), 0, 0,
 			SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE)) {
@@ -131,6 +136,7 @@ WinConsole::doMove(std::optional<tiage::V2i32> maybePos, std::optional<tiage::V2
 		if (!GetConsoleScreenBufferInfoEx(outHandle_, &sbi)) {
 			assert(0);
 		}
+		buffer_ = Matrix<DrawableChar>({ maybeSize->x(), maybeSize->y() });
 		sbi.dwSize = { static_cast<SHORT>(maybeSize->x()), static_cast<SHORT>(maybeSize->y()) };
 		sbi.srWindow = { 0, 0, static_cast<SHORT>(sbi.dwSize.X - 1), static_cast<SHORT>(sbi.dwSize.Y - 0 * 1) };
 		sbi.dwMaximumWindowSize = sbi.dwSize;
@@ -138,6 +144,30 @@ WinConsole::doMove(std::optional<tiage::V2i32> maybePos, std::optional<tiage::V2
 			assert(0);
 		}
 	}
+}
+
+// -------------------------------------------------------------------------------------------------
+
+void
+WinConsole::doResizeFont(size_t fontSize) {
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	if (hConsole == INVALID_HANDLE_VALUE) {
+		return;
+	}
+
+	CONSOLE_FONT_INFOEX cfi;
+	cfi.cbSize = sizeof(CONSOLE_FONT_INFOEX);
+
+	if (!GetCurrentConsoleFontEx(hConsole, FALSE, &cfi)) {
+		return;
+	}		
+
+	cfi.dwFontSize.X = 0; 
+	cfi.dwFontSize.Y = fontSize;  
+
+	wcscpy_s(cfi.FaceName, L"Consolas");
+
+	SetCurrentConsoleFontEx(hConsole, FALSE, &cfi);
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -154,7 +184,7 @@ WinConsole::doSetCursorVisible(bool visible) {
 
 void
 WinConsole::doPutChar(uint32_t x, uint32_t y, const DrawableChar& ch) {
-	buffer_.set(x, y, ch);
+	buffer_.set({x, y}, ch);
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -190,10 +220,10 @@ WinConsole::doFlush(const V2i32& offset) {
 		frameBuffer << cursorMoveCode({
 		static_cast<uint32_t>(y + offset.y()),
 		static_cast<uint32_t>(offset.x())
-		});
+			});
 
 		for (uint32_t x = colStart; x < colEnd - offset.x(); x++) {
-			auto command = buffer_.get(x, y);
+			auto command = buffer_.get({ x, y });
 
 			if (command.bg() != lastBg) {
 				lastBg = command.bg();

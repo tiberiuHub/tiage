@@ -3,7 +3,7 @@
 #pragma once
 
 #include <tiage/Sprite.h>
-#include <tiage/Hitbox.h>
+#include <tiage/HitMatrix.h>
 #include <optional>
 
 namespace tiage {
@@ -11,9 +11,9 @@ namespace tiage {
 class Object {
 public:
 
-	Object(std::optional<Hitbox> hitbox = std::nullopt, std::optional<Sprite> sprite = std::nullopt);
+	Object(std::optional<HitMatrix> hitbox = std::nullopt, std::optional<Sprite> sprite = std::nullopt);
 
-	const Hitbox* hitbox() const;
+	const HitMatrix* hitbox() const;
 
 	const Sprite* sprite() const;
 
@@ -23,7 +23,7 @@ public:
 
 private:
 
-	std::optional <Hitbox> hitbox_;
+	std::optional <HitMatrix> hitbox_;
 
 	std::optional <Sprite> sprite_;
 

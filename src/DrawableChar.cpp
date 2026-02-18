@@ -20,8 +20,8 @@ DrawableChar::DrawableChar(char c, const Color& fg, const Color& bg) :
 
 bool 
 DrawableChar::operator== (const DrawableChar& other) const {
-	return	this->c_ == other.c_ ||
-			this->fg_ == other.fg_ || 
+	return	this->c_ == other.c_ &&
+			this->fg_ == other.fg_ &&
 			this->bg_ == other.bg_;
 }
 

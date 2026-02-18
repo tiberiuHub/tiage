@@ -11,17 +11,73 @@ namespace tiage {
 class Color {
 public:
 
-	static const Color kWhite;	
+	static const Color kWhite;
 	static const Color kBlack;
 	static const Color kNeonRed;
 	static const Color kRed;
 	static const Color kPurple;
 	static const Color kBrown;
 	static const Color kGray;
-	static const Color kGreen;
+	static const Color kNeonGreen;
 	static const Color kDarkGray;
-	static const Color kBlue;
+	static const Color kNeonBlue;
 	static const Color kTan;
+	static const Color kNavy;
+	static const Color kMidnightBlue;
+	static const Color kRoyalBlue;
+	static const Color kDodgerBlue;
+	static const Color kSkyBlue;
+	static const Color kDeepSkyBlue;
+	static const Color kSteelBlue;
+	static const Color kSlateBlue;
+	static const Color kCornflowerBlue;
+	static const Color kTeal;
+	static const Color kForestGreen;
+	static const Color kDarkGreen;
+	static const Color kSeaGreen;
+	static const Color kMediumSeaGreen;
+	static const Color kSpringGreen;
+	static const Color kMint;
+	static const Color kEmerald;
+	static const Color kOliveDrab;
+	static const Color kChartreuse;
+	static const Color kMoss;
+	static const Color kCrimson;
+	static const Color kFirebrick;
+	static const Color kIndianRed;
+	static const Color kCoral;
+	static const Color kTomato;
+	static const Color kDarkOrange;
+	static const Color kLightSalmon;
+	static const Color kSalmon;
+	static const Color kSienna;
+	static const Color kRust;
+	static const Color kKhaki;
+	static const Color kDarkKhaki;
+	static const Color kMustard;
+	static const Color kAmber;
+	static const Color kLemon;
+	static const Color kLavender;
+	static const Color kOrchid;
+	static const Color kPlum;
+	static const Color kHotPink;
+	static const Color kDeepPink;
+	static const Color kFuchsia;
+	static const Color kIndigo;
+	static const Color kDarkViolet;
+	static const Color kChocolate;
+	static const Color kPeru;
+	static const Color kBurlyWood;
+	static const Color kWheat;
+	static const Color kBeige;
+	static const Color kSand;
+	static const Color kCamel;
+	static const Color kDimGray;
+	static const Color kSlateGray;
+	static const Color kLightSlateGray;
+	static const Color kGainsboro;
+	static const Color kIvory;
+	static const Color kSnow;
 
 	std::uint8_t r() const;
 
@@ -67,6 +123,8 @@ private:
 
 };
 
+Color colFromString(std::string str);
+
 /**
  * @return The pair of ansi color codes for the terminal.
  */
@@ -74,7 +132,7 @@ std::string ansiForegroundColorCode(Color color);
 
 std::string ansiBackgroundColorCode(Color color);
 
-/**
+/**	
  * @return The code that resets the colors of the terminal.
  */
 inline constexpr const char* kAnsiColorReset = "\033[0m";

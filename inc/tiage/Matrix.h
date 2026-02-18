@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <stdexcept>
+#include <tiage/Vec2.h>
 
 namespace tiage {
 
@@ -11,74 +12,67 @@ template<typename T>
 class Matrix {
 public:
 
-    Matrix(size_t nRows, size_t nCols) {
-        if (!nRows || !nCols) {
+    static_assert(
+        std::is_default_constructible_v<T>,
+        "Matrix<T> requires T to be default-constructible"
+        );
+
+    Matrix(const Vec2<size_t>& size = {1,1}) {
+        if (!size.x() || !size.y()) {
             throw std::runtime_error("invalid matrix dimensions");
         }
 
-        rows_ = nRows;
-        cols_ = nCols;
-
-        data_.resize(rows_);
+        data_.resize(size.y());
         for (auto& row : data_) {
-            row.resize(cols_);
+            row.resize(size.x());
         }
     }
 
-    Matrix() {
-        rows_ = 0;
-        cols_ = 0;
+    const T& get(Vec2<size_t> pos) const {
+        checkBounds(pos);
+        return data_[pos.y()][pos.x()];
     }
 
-    const T& get(size_t x, size_t y) const {
-        checkBounds(x, y);
-        return data_[y][x];  // outer = row = y, inner = col = x
-    }
-
-    T& get(size_t x, size_t y) {
-        checkBounds(x, y);
-        return data_[y][x];
+    T& get(Vec2<size_t> pos) {
+        checkBounds(pos);
+        return data_[pos.y()][pos.x()];
     }
 
     void set(const T& val) {
-        for (int i = 0; i < rows_; i++) {
-            for (int j = 0; j < cols_; j++) {
+        for (size_t i = 0; i < nRows(); i++) {
+            for (size_t j = 0; j < nCols(); j++) {
                 data_[i][j] = val;
             }
         }
     }
 
-    void set(size_t x, size_t y, const T& val) {
-        checkBounds(x, y);
-        data_[y][x] = val;
+    void set(Vec2<size_t> pos, const T& val) {
+        checkBounds(pos);
+        data_[pos.y()][pos.x()] = val;
     }
 
-    void set(size_t x, size_t y, T&& val) {
-        checkBounds(x, y);
-        data_[y][x] = std::move(val);
+    void set(Vec2<size_t> pos, T&& val) {
+        checkBounds(pos);
+        data_[pos.y()][pos.x()] = std::move(val);
     }
 
     size_t nRows() const {
-        return rows_;
+        return data_.size();
     }
 
     size_t nCols() const {
-        return cols_;
+        return data_[0].size();
     }
 
 private:
 
-    void checkBounds(size_t x, size_t y) const {
-        if (x >= cols_ || y >= rows_) {
+    void checkBounds(Vec2<size_t> pos) const {
+        if (pos.x() >= nCols() || pos.y() >= nRows() ) {
             throw std::out_of_range("Matrix index out of range");
         }
     }
 
     std::vector<std::vector<T>> data_;
-
-    size_t rows_;
-
-    size_t cols_;
 };
 
 } // tiage

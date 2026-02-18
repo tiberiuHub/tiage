@@ -47,7 +47,9 @@ public:
      * @param maybeSize the size of the console in characters.
      */
     void move(std::optional<tiage::V2i32> maybePos = std::nullopt, 
-              std::optional<tiage::V2i32> maybeSize = std::nullopt);
+              std::optional<Vec2<size_t>> maybeSize = std::nullopt);
+
+    void resizeFont(size_t fontSize = 14);//default size is 14
 
     void setCursorVisible(bool visible);
 
@@ -68,7 +70,9 @@ protected:
     virtual void doSetTitle(const char* title) = 0;
 
     virtual void doMove(std::optional<tiage::V2i32> maybePos, 
-                        std::optional<tiage::V2i32> maybeSize) = 0;
+                        std::optional<Vec2<size_t>> maybeSize) = 0;
+
+    virtual void doResizeFont(size_t fontSize) = 0;
 
     virtual void doSetCursorVisible(bool visible) = 0;
 

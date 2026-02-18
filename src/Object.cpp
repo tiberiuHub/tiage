@@ -6,7 +6,7 @@ namespace tiage {
 
 // -------------------------------------------------------------------------------------------------
 
-Object::Object(std::optional<Hitbox> hitbox, std::optional<Sprite> sprite): 
+Object::Object(std::optional<HitMatrix> hitbox, std::optional<Sprite> sprite): 
 	hitbox_(hitbox),
 	sprite_(sprite)
 {
@@ -15,7 +15,7 @@ Object::Object(std::optional<Hitbox> hitbox, std::optional<Sprite> sprite):
 
 // -------------------------------------------------------------------------------------------------
 
-const Hitbox*
+const HitMatrix*
 Object::hitbox() const {
 	if (hasHitbox()) {
 		return &*hitbox_;
