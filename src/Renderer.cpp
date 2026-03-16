@@ -11,7 +11,10 @@ Renderer::Renderer(Vec2<size_t> bufrSize) {
 	auto x = bufrSize.x();
 	auto y = bufrSize.y();
 	layerSize = { x,y };
-	currentLayerID = 0;
+	currentZ = 0;
+	biggestZ = 0;
+	layers.resize(1);
+	layers[0] = Matrix<DrawableChar>(layerSize);
 }
 
 // --------------------------------------------------------------------------------------------------
@@ -26,29 +29,48 @@ Renderer::clear() {
 // --------------------------------------------------------------------------------------------------
 
 void
-Renderer::clearLayer(uint32_t layerID) {
-	layers[layerID].data.set(DrawableChar::kDefault);
+Renderer::present(IConsole& console, const V2i32& offset) {
+	for (size_t x = 0; x < layerSize.x(); x++) {
+		for (size_t y = 0; y < layerSize.y(); y++) {
+			console.putChar(
+				x + offset.x(),
+				y + offset.y(),
+				getTopmostChr({ x, y })
+			);
+		}
+	}
 }
 
 // --------------------------------------------------------------------------------------------------
 
-int
-Renderer::addLayer(int zOrder) {
+void
+Renderer::doubleRendering(bool value) {
+	doubleRenderEnabled = value;
+}
 
-	if (zOrderExists(zOrder)) {
-		throw std::runtime_error("Cannot have two layers with equal z order");
-	}
+// --------------------------------------------------------------------------------------------------
 
-	layers.push_back({ static_cast<int>(layers.size()), zOrder, Matrix<DrawableChar>(layerSize) });
-	sortLayers();
-	return static_cast<int>(layers.size() - 1);
+void
+Renderer::clearLayer(uint32_t layerID) {
+	layers[layerID].set(DrawableChar::kDefault);
 }
 
 // --------------------------------------------------------------------------------------------------
 
 void 
 Renderer::drawChar(const Vec2<size_t>& pos, const DrawableChar& chr) {
-	getLayerByID(currentLayerID).data.set(pos, chr);
+	if (!doubleRenderEnabled) {
+		if (posInside(pos)) {
+			layers[currentZ].set(pos, chr);
+		}
+	} else {
+		if (posInside({ pos.x() * 2 + 1, pos.y() })) {
+			layers[currentZ].set({ pos.x() * 2, pos.y() }, chr);
+			layers[currentZ].set({ pos.x() * 2 + 1, pos.y() }, chr);
+		}
+		
+	}
+	
 }
 
 // --------------------------------------------------------------------------------------------------
@@ -190,23 +212,13 @@ Renderer::drawTriangle(
 // --------------------------------------------------------------------------------------------------
 
 void
-Renderer::setLayer(uint32_t layerID) {
-	if (layerID >= static_cast<int>(layers.size())) {
-		throw std::out_of_range("Invalid layer index");
+Renderer::changeZ(uint32_t layerZ) {
+	currentZ = layerZ;
+	if (layerZ > biggestZ) {
+		layers.resize(layerZ + 1);
+		layers[layerZ] = Matrix<DrawableChar>(layerSize);
+		biggestZ = layerZ;
 	}
-	currentLayerID = layerID;
-}
-
-// --------------------------------------------------------------------------------------------------
-
-Renderer::Layer&
-Renderer::getLayerByID(int layerID) {
-	for (auto& layer : layers) {
-		if (layer.ID == layerID) {
-			return layer;
-		}
-	}
-	throw std::out_of_range("ID not found");
 }
 
 // --------------------------------------------------------------------------------------------------
@@ -259,50 +271,12 @@ Renderer::drawString(
 	}
 }
 
-
-// --------------------------------------------------------------------------------------------------
-
-void
-Renderer::present(IConsole& console, const V2i32& offset) {
-	for (size_t x = 0; x < layerSize.x(); x++) {
-		for (size_t y = 0; y < layerSize.y(); y++) {
-			console.putChar(
-				x + offset.x(),
-				y + offset.y(),
-				getTopmostChr({ x, y })
-			);
-		}
-	}
-}
-
-// --------------------------------------------------------------------------------------------------
-
-bool
-Renderer::zOrderExists(int zOrder) {
-	for (const auto& layer : layers) {
-		if (layer.zOrder == zOrder) {
-			return true;
-		}
-	}
-	return false;
-}
-
-// --------------------------------------------------------------------------------------------------
-
-void
-Renderer::sortLayers() {
-	std::sort(layers.begin(), layers.end(),
-		[](const Layer& a, const Layer& b) {
-			return a.zOrder < b.zOrder;
-		});
-}
-
 // --------------------------------------------------------------------------------------------------
 
 DrawableChar
 Renderer::getTopmostChr(const Vec2<size_t>& pos) {
 	for (auto i = layers.rbegin(); i != layers.rend(); ++i) {
-		const auto& chr = i->data.get(pos);
+		const auto& chr = i->get(pos);
 		if (chr != DrawableChar::kDefault) {
 			return chr;
 		}
@@ -310,6 +284,12 @@ Renderer::getTopmostChr(const Vec2<size_t>& pos) {
 	return DrawableChar::kDefault;
 }
 
+// --------------------------------------------------------------------------------------------------
+
+bool 
+Renderer::posInside(const Vec2<size_t>& pos) const {
+	return pos <= layerSize;
+}
 // --------------------------------------------------------------------------------------------------
 
 } // tiage

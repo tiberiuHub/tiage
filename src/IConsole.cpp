@@ -24,7 +24,7 @@ IConsole::destroy() {
 // --------------------------------------------------------------------------------------------------
 
 void
-IConsole::setTitle(const char* title) {
+IConsole::setTitle(const std::string& title) {
     doSetTitle(title);
 }
 

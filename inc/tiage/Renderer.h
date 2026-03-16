@@ -18,11 +18,11 @@ public:
 
 	void present(IConsole& console, const V2i32& offset = { 0,0 });
 
-	void clearLayer(uint32_t layerID);
+	void clearLayer(uint32_t layerZ);
 
-	void setLayer(uint32_t layerID);
+	void changeZ(uint32_t layerZ);
 
-	int addLayer(int zOrder);//return assigned layer id
+	void doubleRendering(bool value);
 
 	void drawChar(const Vec2<size_t>& pos, const DrawableChar& chr);
 
@@ -40,25 +40,19 @@ public:
 
 private:
 
-	struct Layer {
-		int ID;
-		int zOrder;
-		Matrix<DrawableChar> data;
-	};
-
-	bool zOrderExists(int zOrder);
-
-	void sortLayers();
+	bool doubleRenderEnabled = false;
 
 	DrawableChar getTopmostChr(const Vec2<size_t>& pos);
 
-	Layer& getLayerByID(int layerID);
+	bool posInside(const Vec2<size_t>& pos) const;
 
 	Vec2<size_t> layerSize;
 
-	uint32_t currentLayerID;
+	uint32_t currentZ;
 
-	std::vector<Layer> layers;
+	uint32_t biggestZ;
+
+	std::vector<Matrix<DrawableChar>> layers;
 
 };
 

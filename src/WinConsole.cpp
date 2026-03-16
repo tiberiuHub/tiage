@@ -10,7 +10,6 @@
 #include <tlhelp32.h>
 #include <algorithm>
 
-
 namespace tiage {
 
 // -------------------------------------------------------------------------------------------------
@@ -25,17 +24,19 @@ bool
 WinConsole::doCreate(uint64_t createOptions) {
 	FreeConsole();
 	if (!AllocConsole()) {
-		assert(0);
+		throw std::runtime_error("AllocConsole failed");
 		return false;
 	}
+
+
 	if (!freopen("CONIN$", "r", stdin) ||
 		!freopen("CONOUT$", "w", stdout) ||
 		!freopen("CONERR$", "w", stderr)) {
-		assert(0);
+		throw std::runtime_error("freeopen failed");
 		return false;
 	}
 	if (winHandle_ = GetConsoleWindow(); winHandle_ == NULL) {
-		assert(0);
+		throw std::runtime_error("winHandle not found");
 		return false;
 	}
 	LONG style = GetWindowLong(winHandle_, GWL_STYLE);
@@ -55,38 +56,39 @@ WinConsole::doCreate(uint64_t createOptions) {
 		style &= ~WS_VSCROLL;
 	}
 	if (!SetWindowLong(winHandle_, GWL_STYLE, style)) {
-		assert(0);
+		throw std::runtime_error("operation failed");
 	}
 	if (inHandle_ = GetStdHandle(STD_INPUT_HANDLE); inHandle_ == INVALID_HANDLE_VALUE) {
-		assert(0);
+		throw std::runtime_error("operation failed");
 		return false;
 	} else {
-		DWORD inMode = ENABLE_EXTENDED_FLAGS;
-		inMode |= (createOptions & EnableProcessedInput) * ENABLE_PROCESSED_INPUT;
-		inMode |= (createOptions & EnableLineInput) * ENABLE_LINE_INPUT;
-		inMode |= (createOptions & EnableEchoInput) * ENABLE_ECHO_INPUT;
-		inMode |= (createOptions & EnableWindowInput) * ENABLE_WINDOW_INPUT;
-		inMode |= (createOptions & EnableMouseInput) * ENABLE_MOUSE_INPUT;
-		inMode |= (createOptions & EnableInsertMode) * ENABLE_INSERT_MODE;
-		inMode |= (createOptions & EnableQuickEditMode) * ENABLE_QUICK_EDIT_MODE;
-		inMode |= (createOptions & EnableExtendedFlags) * ENABLE_EXTENDED_FLAGS;
-		inMode |= (createOptions & EnableAutoPosition) * ENABLE_AUTO_POSITION;
-		inMode |= (createOptions & EnableVirtualTerminalInput) * ENABLE_VIRTUAL_TERMINAL_INPUT;
+		DWORD inMode;
+		GetConsoleMode(inHandle_, &inMode);
+		inMode |= (createOptions & EnableProcessedInput) ? ENABLE_PROCESSED_INPUT : 0;
+		inMode |= (createOptions & EnableLineInput) ? ENABLE_LINE_INPUT : 0;
+		inMode |= (createOptions & EnableEchoInput) ? ENABLE_ECHO_INPUT : 0;
+		inMode |= (createOptions & EnableWindowInput) ? ENABLE_WINDOW_INPUT : 0;
+		inMode |= (createOptions & EnableMouseInput) ? ENABLE_MOUSE_INPUT : 0;
+		inMode |= (createOptions & EnableInsertMode) ? ENABLE_INSERT_MODE : 0;
+		inMode |= (createOptions & EnableQuickEditMode) ? ENABLE_QUICK_EDIT_MODE : 0;
+		inMode |= (createOptions & EnableExtendedFlags) ? ENABLE_EXTENDED_FLAGS : 0;
+		inMode |= (createOptions & EnableAutoPosition) ? ENABLE_AUTO_POSITION : 0;
+		inMode |= (createOptions & EnableVirtualTerminalInput) ? ENABLE_VIRTUAL_TERMINAL_INPUT : 0;
 		if (!SetConsoleMode(inHandle_, inMode)) {
-			assert(0);
+			throw std::runtime_error("operation failed");
 			return false;
 		}
 	}
 	if (outHandle_ = GetStdHandle(STD_OUTPUT_HANDLE); outHandle_ == INVALID_HANDLE_VALUE) {
-		assert(0);
+		throw std::runtime_error("operation failed");
 		return false;
 	} else {
 		DWORD outMode = 0;
-		outMode |= (createOptions & EnableProcessedOutput) * ENABLE_PROCESSED_OUTPUT;
-		outMode |= (createOptions & EnableWrapAtEolOutput) * ENABLE_WRAP_AT_EOL_OUTPUT;
-		outMode |= (createOptions & EnableVirtualTerminalProcessing) * ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-		outMode |= (createOptions & DisableNewlineAutoReturn) * DISABLE_NEWLINE_AUTO_RETURN;
-		outMode |= (createOptions & EnableLvbGridWorldwide) * ENABLE_LVB_GRID_WORLDWIDE;
+		outMode |= (createOptions & EnableProcessedOutput) ? ENABLE_PROCESSED_OUTPUT : 0;
+		outMode |= (createOptions & EnableWrapAtEolOutput) ? ENABLE_WRAP_AT_EOL_OUTPUT : 0;
+		outMode |= (createOptions & EnableVirtualTerminalProcessing) ? ENABLE_VIRTUAL_TERMINAL_PROCESSING : 0;
+		outMode |= (createOptions & DisableNewlineAutoReturn) ? DISABLE_NEWLINE_AUTO_RETURN : 0;
+		outMode |= (createOptions & EnableLvbGridWorldwide) ? ENABLE_LVB_GRID_WORLDWIDE : 0;
 		if (!SetConsoleMode(outHandle_, outMode)) {
 			assert(0);
 			return false;
@@ -95,7 +97,6 @@ WinConsole::doCreate(uint64_t createOptions) {
 
 	system("cls");
 	winHandle_ = GetConsoleWindow();
-
 	return true;
 }
 
@@ -112,8 +113,8 @@ WinConsole::doDestroy() {
 // -------------------------------------------------------------------------------------------------
 
 void
-WinConsole::doSetTitle(const char* title) {
-	if (!SetConsoleTitle(title)) {
+WinConsole::doSetTitle(const std::string& title) {
+	if (!SetConsoleTitle(title.c_str())) {
 		assert(0);
 	}
 }
@@ -174,10 +175,11 @@ WinConsole::doResizeFont(size_t fontSize) {
 
 void
 WinConsole::doSetCursorVisible(bool visible) {
-	CONSOLE_CURSOR_INFO info = { 100, visible };
-	if (!SetConsoleCursorInfo(outHandle_, &info)) {
-		assert(0);
-	}
+	HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+	CONSOLE_CURSOR_INFO cursorInfo;
+	GetConsoleCursorInfo(consoleHandle, &cursorInfo);
+	cursorInfo.bVisible = visible;
+	SetConsoleCursorInfo(consoleHandle, &cursorInfo);
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -208,16 +210,16 @@ WinConsole::doFlush(const V2i32& offset) {
 		clear();
 	}
 
-	std::stringstream frameBuffer;
-
+	std::string frameBuffer;
+	frameBuffer.reserve(buffer_.nRows() * buffer_.nCols() * 2);
 	Color lastFg = Color::kWhite;
 	Color lastBg = Color::kBlack;
 
-	frameBuffer << kAnsiColorReset;
+	frameBuffer += ansiBackgroundColorCode(Color::kBlack) + ansiForegroundColorCode(Color::kWhite);
 
 	for (uint32_t y = rowStart; y < rowEnd - offset.y(); y++) {
 
-		frameBuffer << cursorMoveCode({
+		frameBuffer += cursorMoveCode({
 		static_cast<uint32_t>(y + offset.y()),
 		static_cast<uint32_t>(offset.x())
 			});
@@ -227,23 +229,23 @@ WinConsole::doFlush(const V2i32& offset) {
 
 			if (command.bg() != lastBg) {
 				lastBg = command.bg();
-				frameBuffer << ansiBackgroundColorCode(lastBg);
-			}
+				frameBuffer += ansiBackgroundColorCode(lastBg);
+			 }
 
-			if (command.fg() != lastFg) {
+			 if (command.fg() != lastFg) {
 				lastFg = command.fg();
-				frameBuffer << ansiForegroundColorCode(lastFg);
+				frameBuffer += ansiForegroundColorCode(lastFg);
 			}
 
-			frameBuffer << command.c();
+			frameBuffer += command.c();
 
 		}
 
 	}
 
-	frameBuffer << kAnsiColorReset;
+	frameBuffer += kAnsiColorReset;
 
-	std::cout << frameBuffer.str();
+	std::cout << frameBuffer.c_str();
 }
 
 // -------------------------------------------------------------------------------------------------

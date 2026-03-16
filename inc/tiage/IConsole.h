@@ -39,7 +39,7 @@ public:
 
     void destroy();
 
-    void setTitle(const char* title);
+    void setTitle(const std::string& title);
 
     /**
      * Sets the position and size of the console.
@@ -49,7 +49,11 @@ public:
     void move(std::optional<tiage::V2i32> maybePos = std::nullopt, 
               std::optional<Vec2<size_t>> maybeSize = std::nullopt);
 
-    void resizeFont(size_t fontSize = 14);//default size is 14
+    /**
+     * Sets the size of the console text , does not work properly with small numbers , display will be stretched
+     * @param font size size of font
+     */
+    void resizeFont(size_t fontSize = 14);
 
     void setCursorVisible(bool visible);
 
@@ -67,7 +71,7 @@ protected:
 
     virtual void doDestroy() = 0;
 
-    virtual void doSetTitle(const char* title) = 0;
+    virtual void doSetTitle(const std::string& title) = 0;
 
     virtual void doMove(std::optional<tiage::V2i32> maybePos, 
                         std::optional<Vec2<size_t>> maybeSize) = 0;

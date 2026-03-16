@@ -15,16 +15,15 @@ public:
 
 	void setSize(Vec2<size_t> newSize);
 
-	/**
-	* Loads sprite from file into memory,first few lines declare the drawableChar pallete used in the sprite, the other
-	* lines are the representation of the sprite using the pallete that was declared
-	*/
-	
-	void parseFromFile(const std::string& path);
-
 	DrawableChar getChar(Vec2<size_t> pos) const;
 
 	 void setChar(Vec2<size_t> pos, const DrawableChar& c);
+
+	 /**
+	* Loads sprite from file into memory,first few lines declare the drawableChar pallete used in the sprite, the other
+	* lines are the representation of the sprite using the pallete that was declared
+	*/
+	 void parseFromFile(const std::string& path);
 
 private:
 

@@ -45,7 +45,7 @@ private:
 
     void doDestroy() override;
 
-    void doSetTitle(const char* title) override;
+    void doSetTitle(const std::string& title) override;
 
     void doMove(std::optional<tiage::V2i32> maybePos, std::optional<Vec2<size_t>> maybeSize) override;
 
@@ -72,6 +72,7 @@ private:
     HANDLE inHandle_ = INVALID_HANDLE_VALUE;
 
     HANDLE outHandle_ = INVALID_HANDLE_VALUE;
+
 };
 
 } // tiage

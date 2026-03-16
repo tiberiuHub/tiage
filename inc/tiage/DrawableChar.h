@@ -27,8 +27,6 @@ public:
 
 	Color fg() const;
 
-
-
 private:
 	
 	char c_;

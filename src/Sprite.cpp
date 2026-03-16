@@ -24,7 +24,21 @@ Sprite::setSize(Vec2<size_t> newSize) {
 
 // -------------------------------------------------------------------------------------------------
 
+DrawableChar 
+Sprite::getChar(Vec2<size_t> pos) const {
+	return data_.get(pos);
+}
+
+// -------------------------------------------------------------------------------------------------
+
 void 
+Sprite::setChar(Vec2<size_t> pos, const DrawableChar& c) {
+	data_.set(pos, c);
+}
+
+// -------------------------------------------------------------------------------------------------
+
+void
 Sprite::parseFromFile(const std::string& path) {
 	std::ifstream file(path);
 	if (!file) {
@@ -60,8 +74,8 @@ Sprite::parseFromFile(const std::string& path) {
 			throw std::runtime_error("character can be space string that turns into space char or a single character");
 		}
 
-		DrawableChar definedChar(chr,colFromString(fgColor),colFromString(bgColor));
-		palette[symbol] = definedChar ;
+		DrawableChar definedChar(chr, colFromString(fgColor), colFromString(bgColor));
+		palette[symbol] = definedChar;
 	}
 	while (std::getline(file, line)) {
 		lineCount++;
@@ -91,20 +105,6 @@ Sprite::parseFromFile(const std::string& path) {
 		}
 	}
 	data_ = std::move(result);
-}
-
-// -------------------------------------------------------------------------------------------------
-
-DrawableChar 
-Sprite::getChar(Vec2<size_t> pos) const {
-	return data_.get(pos);
-}
-
-// -------------------------------------------------------------------------------------------------
-
-void 
-Sprite::setChar(Vec2<size_t> pos, const DrawableChar& c) {
-	data_.set(pos, c);
 }
 
 // -------------------------------------------------------------------------------------------------

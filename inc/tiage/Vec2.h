@@ -39,6 +39,24 @@ public:
         return !(*this == other);
     }
 
+    bool operator>(const Vec2& other) const {
+        return this->x() > other.x() && 
+               this->y() > other.y();
+    }
+
+    bool operator<(const Vec2& other) const {
+        return this->x() < other.x() &&
+            this->y() < other.y();
+    }
+
+    bool operator>=(const Vec2& other) const {
+        return x() >= other.x() && y() >= other.y();
+    }
+
+    bool operator<=(const Vec2& other) const {
+        return x() <= other.x() && y() <= other.y();
+    }
+
     Vec2& operator+=(const Vec2& other) {
         x_ += other.x_;
         y_ += other.y_;
