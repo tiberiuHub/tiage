@@ -5,6 +5,7 @@
 #include "tiage/IConsole.h"
 #include "tiage/Matrix.h"
 #include "tiage/Sprite.h"
+#include <functional>
 #include <cmath>
 
 namespace tiage {
@@ -40,19 +41,20 @@ public:
 
 private:
 
+	struct cmd_t {
+		Vec2<size_t> pos;
+		DrawableChar chr;
+	};
+
 	bool doubleRenderEnabled = false;
-
-	DrawableChar getTopmostChr(const Vec2<size_t>& pos);
-
+	
 	bool posInside(const Vec2<size_t>& pos) const;
 
 	Vec2<size_t> layerSize;
 
 	uint32_t currentZ;
 
-	uint32_t biggestZ;
-
-	std::vector<Matrix<DrawableChar>> layers;
+	std::vector<std::vector<cmd_t>> layers;
 
 };
 

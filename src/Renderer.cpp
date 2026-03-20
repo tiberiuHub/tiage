@@ -12,9 +12,7 @@ Renderer::Renderer(Vec2<size_t> bufrSize) {
 	auto y = bufrSize.y();
 	layerSize = { x,y };
 	currentZ = 0;
-	biggestZ = 0;
 	layers.resize(1);
-	layers[0] = Matrix<DrawableChar>(layerSize);
 }
 
 // --------------------------------------------------------------------------------------------------
@@ -22,7 +20,7 @@ Renderer::Renderer(Vec2<size_t> bufrSize) {
 void
 Renderer::clear() {
 	for (size_t i = 0; i < layers.size(); i++) {
-		clearLayer(static_cast<int>(i));
+		clearLayer(i);
 	}
 }
 
@@ -30,15 +28,13 @@ Renderer::clear() {
 
 void
 Renderer::present(IConsole& console, const V2i32& offset) {
-	for (size_t x = 0; x < layerSize.x(); x++) {
-		for (size_t y = 0; y < layerSize.y(); y++) {
-			console.putChar(
-				x + offset.x(),
-				y + offset.y(),
-				getTopmostChr({ x, y })
-			);
+	for (size_t i = 0; i < layers.size(); i++) {
+		for (size_t j = 0; j < layers[i].size(); j++) {
+			const cmd_t& cmd = layers[i][j];
+			console.putChar(cmd.pos.x(), cmd.pos.y(),cmd.chr);
 		}
 	}
+	clear();
 }
 
 // --------------------------------------------------------------------------------------------------
@@ -52,21 +48,21 @@ Renderer::doubleRendering(bool value) {
 
 void
 Renderer::clearLayer(uint32_t layerID) {
-	layers[layerID].set(DrawableChar::kDefault);
+	layers[layerID].clear();
 }
 
 // --------------------------------------------------------------------------------------------------
 
 void 
-Renderer::drawChar(const Vec2<size_t>& pos, const DrawableChar& chr) {
+Renderer::drawChar(const Vec2<size_t>& pos,  const DrawableChar& chr) {
 	if (!doubleRenderEnabled) {
 		if (posInside(pos)) {
-			layers[currentZ].set(pos, chr);
+			layers[currentZ].push_back({ pos, chr });
 		}
 	} else {
 		if (posInside({ pos.x() * 2 + 1, pos.y() })) {
-			layers[currentZ].set({ pos.x() * 2, pos.y() }, chr);
-			layers[currentZ].set({ pos.x() * 2 + 1, pos.y() }, chr);
+			layers[currentZ].push_back({ { pos.x() * 2, pos.y() }, chr });
+			layers[currentZ].push_back({ { pos.x() * 2 + 1, pos.y() }, chr });
 		}
 		
 	}
@@ -213,11 +209,9 @@ Renderer::drawTriangle(
 
 void
 Renderer::changeZ(uint32_t layerZ) {
-	currentZ = layerZ;
-	if (layerZ > biggestZ) {
+	if (layerZ > layers.size() - 1) {
 		layers.resize(layerZ + 1);
-		layers[layerZ] = Matrix<DrawableChar>(layerSize);
-		biggestZ = layerZ;
+		currentZ = layerZ;
 	}
 }
 
@@ -269,19 +263,6 @@ Renderer::drawString(
 		const char& chr = string[i];
 		
 	}
-}
-
-// --------------------------------------------------------------------------------------------------
-
-DrawableChar
-Renderer::getTopmostChr(const Vec2<size_t>& pos) {
-	for (auto i = layers.rbegin(); i != layers.rend(); ++i) {
-		const auto& chr = i->get(pos);
-		if (chr != DrawableChar::kDefault) {
-			return chr;
-		}
-	}
-	return DrawableChar::kDefault;
 }
 
 // --------------------------------------------------------------------------------------------------

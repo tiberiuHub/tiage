@@ -36,6 +36,11 @@ add_library(${TARGET}
 		"${CMAKE_CURRENT_SOURCE_DIR}/src/Renderer.cpp"
 		"${CMAKE_CURRENT_SOURCE_DIR}/src/DrawableChar.cpp"
 		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/DrawableChar.h"
+		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/KeyboardInput.h"
+		"${CMAKE_CURRENT_SOURCE_DIR}/src/IKeyboard.cpp"
+		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/IKeyboard.h"
+		"${CMAKE_CURRENT_SOURCE_DIR}/src/WinKeyboard.cpp"
+		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/WinKeyboard.h"	
 )
 
 target_include_directories(${TARGET}       
