@@ -62,8 +62,8 @@ WinConsole::doCreate(uint64_t createOptions) {
 		throw std::runtime_error("operation failed");
 		return false;
 	} else {
-		DWORD inMode;
-		GetConsoleMode(inHandle_, &inMode);
+		DWORD inMode = 0;
+		//GetConsoleMode(inHandle_, &inMode);
 		inMode |= (createOptions & EnableProcessedInput) ? ENABLE_PROCESSED_INPUT : 0;
 		inMode |= (createOptions & EnableLineInput) ? ENABLE_LINE_INPUT : 0;
 		inMode |= (createOptions & EnableEchoInput) ? ENABLE_ECHO_INPUT : 0;

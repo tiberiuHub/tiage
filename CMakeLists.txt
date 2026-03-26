@@ -14,8 +14,8 @@ add_library(${TARGET}
 		"${CMAKE_CURRENT_SOURCE_DIR}/src/Color.cpp"
 		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Sprite.h"
 		"${CMAKE_CURRENT_SOURCE_DIR}/src/Sprite.cpp"
-		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/HitMatrix.h"
-		"${CMAKE_CURRENT_SOURCE_DIR}/src/HitMatrix.cpp"
+		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Hitbox.h"
+		"${CMAKE_CURRENT_SOURCE_DIR}/src/Hitbox.cpp"
 		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Object.h"
 		"${CMAKE_CURRENT_SOURCE_DIR}/src/Object.cpp"
 		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Viewport.h"
@@ -36,11 +36,14 @@ add_library(${TARGET}
 		"${CMAKE_CURRENT_SOURCE_DIR}/src/Renderer.cpp"
 		"${CMAKE_CURRENT_SOURCE_DIR}/src/DrawableChar.cpp"
 		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/DrawableChar.h"
-		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/KeyboardInput.h"
 		"${CMAKE_CURRENT_SOURCE_DIR}/src/IKeyboard.cpp"
 		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/IKeyboard.h"
 		"${CMAKE_CURRENT_SOURCE_DIR}/src/WinKeyboard.cpp"
 		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/WinKeyboard.h"	
+		"${CMAKE_CURRENT_SOURCE_DIR}/src/IMouse.cpp"
+		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/IMouse.h"
+		"${CMAKE_CURRENT_SOURCE_DIR}/src/WinMouse.cpp"
+		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/WinMouse.h"	
 )
 
 target_include_directories(${TARGET}       

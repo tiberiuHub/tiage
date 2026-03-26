@@ -14,64 +14,72 @@ namespace tiage {
 class WinConsole final : public IConsole {
 public:
 
-    WinConsole(Vec2<size_t> bufferSize);
+	WinConsole(Vec2<size_t> bufferSize);
 
-    enum win_in_create_options_t : uint64_t {
-        EnableProcessedInput = 0x0001llu << 20,
-        EnableLineInput = 0x0002llu << 20,
-        EnableEchoInput = 0x0004llu << 20,
-        EnableWindowInput = 0x0008llu << 20,
-        EnableMouseInput = 0x0010llu << 20,
-        EnableInsertMode = 0x0020llu << 20,
-        EnableQuickEditMode = 0x0040llu << 20,
-        EnableExtendedFlags = 0x0080llu << 20,
-        EnableAutoPosition = 0x0100llu << 20,
-        EnableVirtualTerminalInput = 0x0200llu <<20
-    };
-    
-    enum win_out_create_options_t : uint64_t {
-        EnableProcessedOutput = 0x0001llu << 40,
-        EnableWrapAtEolOutput = 0x0002llu << 40,
-        EnableVirtualTerminalProcessing = 0x0004llu << 40,
-        DisableNewlineAutoReturn = 0x0008llu << 40,
-        EnableLvbGridWorldwide = 0x0010llu <<40
-    };
+	enum win_in_create_options_t : uint64_t {
+		EnableProcessedInput = 0x0001llu << 20,
+		EnableLineInput = 0x0002llu << 20,
+		EnableEchoInput = 0x0004llu << 20,
+		EnableWindowInput = 0x0008llu << 20,
+		EnableMouseInput = 0x0010llu << 20,
+		EnableInsertMode = 0x0020llu << 20,
+		EnableQuickEditMode = 0x0040llu << 20,
+		EnableExtendedFlags = 0x0080llu << 20,
+		EnableAutoPosition = 0x0100llu << 20,
+		EnableVirtualTerminalInput = 0x0200llu << 20
+	};
 
-    static constexpr uint64_t kWinDefaultCreateOptions = 0;
+	enum win_out_create_options_t : uint64_t {
+		EnableProcessedOutput = 0x0001llu << 40,
+		EnableWrapAtEolOutput = 0x0002llu << 40,
+		EnableVirtualTerminalProcessing = 0x0004llu << 40,
+		DisableNewlineAutoReturn = 0x0008llu << 40,
+		EnableLvbGridWorldwide = 0x0010llu << 40
+	};
+
+	static constexpr uint64_t defaultGameOptions = 
+		tiage::WinConsole::EnableExtendedFlags |
+		tiage::WinConsole::EnableMouseInput |
+		tiage::WinConsole::NoMaximize |
+		tiage::WinConsole::NoResize |
+		tiage::WinConsole::NoScrollH |
+		tiage::WinConsole::NoScrollV;
+
+	static constexpr uint64_t kWinDefaultCreateOptions = 0;
 
 private:
 
-    bool doCreate(uint64_t createOptions) override;
+	bool doCreate(uint64_t createOptions) override;
 
-    void doDestroy() override;
+	void doDestroy() override;
 
-    void doSetTitle(const std::string& title) override;
+	void doSetTitle(const std::string& title) override;
 
-    void doMove(std::optional<tiage::V2i32> maybePos, std::optional<Vec2<size_t>> maybeSize) override;
+	void doMove(std::optional<tiage::V2i32> maybePos, std::optional<Vec2<size_t>> maybeSize) override;
 
-    void doResizeFont(size_t fontSize) override;
+	void doResizeFont(size_t fontSize) override;
 
-    void doSetCursorVisible(bool visible) override;
+	void doSetCursorVisible(bool visible) override;
 
-    void doPutChar(uint32_t x, uint32_t y,const DrawableChar& ch) override;
+	void doPutChar(uint32_t x, uint32_t y, const DrawableChar& ch) override;
 
-    void doFlush(const V2i32& offset) override;
+	void doFlush(const V2i32& offset) override;
 
-    void doClear() override;
+	void doClear() override;
 
-    std::string doGetHostProcess() override;
+	std::string doGetHostProcess() override;
 
-    std::string cursorMoveCode(const V2u32& pos) const;
+	std::string cursorMoveCode(const V2u32& pos) const;
 
-    Vec2<uint32_t> currentConsoleSize_;
+	Vec2<uint32_t> currentConsoleSize_;
 
-    Vec2<uint32_t> getConsoleSize() const;
+	Vec2<uint32_t> getConsoleSize() const;
 
-    HWND winHandle_ = nullptr;
+	HWND winHandle_ = nullptr;
 
-    HANDLE inHandle_ = INVALID_HANDLE_VALUE;
+	HANDLE inHandle_ = INVALID_HANDLE_VALUE;
 
-    HANDLE outHandle_ = INVALID_HANDLE_VALUE;
+	HANDLE outHandle_ = INVALID_HANDLE_VALUE;
 
 };
 

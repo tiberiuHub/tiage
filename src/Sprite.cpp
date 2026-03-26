@@ -97,7 +97,7 @@ Sprite::parseFromFile(const std::string& path) {
 			auto it = palette.find(chr);
 			if (it != palette.end()) {
 				result.set({ j,i }, it->second);
-			} else if (chr == ' ') {
+			} else if (chr == ' ' or chr == '.') {
 				result.set({ j,i }, DrawableChar::kDefault);
 			} else {
 				throw std::runtime_error("Symbol not found in palette");

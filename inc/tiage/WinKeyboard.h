@@ -2,26 +2,18 @@
 
 #pragma once
 
-#include<bitset>
+#include "tiage/IKeyboard.h"
 
 namespace tiage {
 
-class Keyboard {
+class WinKeyboard final : public IKeyboard {
 public:
 
-	void update();
-	
-	//bool justPressed(int key) const;
-	//bool justReleased(int key) const;
-	//bool isHolding(int key) const;
-	//bool isPressed
-
+	void doUpdate() override;
 
 private:
 
-	last_;
 
-	char current_;
 
 };
 

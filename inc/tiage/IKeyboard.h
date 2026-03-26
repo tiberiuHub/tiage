@@ -6,22 +6,26 @@
 
 namespace tiage {
 
-class Keyboard {
+class IKeyboard {
 public:
 
 	void update();
 	
-	//bool justPressed(int key) const;
-	//bool justReleased(int key) const;
-	//bool isHolding(int key) const;
-	//bool isPressed
+	bool pressed(int key) const;
 
+	bool released(int key) const;
+
+	bool holding(int key) const;
+
+	void setKey(int key);
 
 private:
 
-	last_;
+	virtual void doUpdate() = 0;
 
-	char current_;
+	std::bitset<256>last_;
+
+	std::bitset<256>current_;
 
 };
 

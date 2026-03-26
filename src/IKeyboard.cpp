@@ -1,20 +1,45 @@
 // Copyright Tiberiu 2025
 
-#include "tiage/KeyboardInput.h"
-#include <conio.h>
-#include <winap>
+#include "tiage/IKeyboard.h"
 
 namespace tiage {
 
 // --------------------------------------------------------------------------------------------------
 
 void 
-Keyboard::update() {
+IKeyboard::update() {
     last_ = current_;
+    current_.reset();
+    doUpdate();
+}
 
-    for (int key = 0; key < 256; key++) {
-        current[key] = (GetAsyncKeyState(key) & 0x8000);
-    }
+
+// --------------------------------------------------------------------------------------------------
+
+bool 
+IKeyboard::pressed(int key) const {
+    return current_[key] && !last_[key];
+}
+
+// --------------------------------------------------------------------------------------------------
+
+bool
+IKeyboard::released(int key) const {
+    return !current_[key] && last_[key];
+}
+
+// --------------------------------------------------------------------------------------------------
+
+bool
+IKeyboard::holding(int key) const {
+    return current_[key];
+}
+
+// --------------------------------------------------------------------------------------------------
+
+void
+IKeyboard::setKey(int key) {
+    current_[key] = 1;
 }
 
 // --------------------------------------------------------------------------------------------------
