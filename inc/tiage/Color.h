@@ -105,6 +105,10 @@ public:
 
 	bool operator!= (const Color& other) const;
 
+	Color operator* (uint8_t factor) const;
+
+	Color operator+ (const Color& other) const;
+
 	Color(std::uint8_t r = 0, std::uint8_t g = 0, std::uint8_t b = 0, std::uint8_t a = 255);
 
 private:
@@ -126,10 +130,12 @@ private:
 Color colFromString(std::string str);
 
 /**
- * @return The pair of ansi color codes for the terminal.
+ * @return The pair of ansi color code for changing the terminal foreground.
  */
 std::string ansiForegroundColorCode(Color color);
-
+/**
+ * @return The pair of ansi color code for changing the terminal background.
+ */
 std::string ansiBackgroundColorCode(Color color);
 
 /**	

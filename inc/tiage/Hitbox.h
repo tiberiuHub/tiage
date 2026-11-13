@@ -8,24 +8,28 @@
 
 namespace tiage {
 
-class HitMatrix {
+class Hitbox {
 public:
 
-	HitMatrix(const Vec2<size_t>& size = {1,1});
+	Hitbox(const V2i32& size = {1,1}, const V2i32& offset = { 0,0 });
 
-	Vec2<size_t> size() const;
+	V2i32 size() const;
 
-	void resize(const Vec2<size_t>& newSize);
+	void resize(const V2i32& newSize);
 
-	void parseFromFile(const std::string& path);//move function
+	Vec2<int32_t> offset() const;
 
-	bool get(const Vec2<size_t>& pos) const;
+	void setOffset(const V2i32& newOffset);
 
-	void set(const Vec2<size_t>& pos, bool state);
+	bool intersects(const Hitbox& other) const;
+
+	bool contains(const V2i32& other) const;
 
 private:
 
-	Matrix<bool>data_;
+	V2i32 offset_ = {0,0};
+
+	V2i32 size_;
 
 };
 

@@ -52,10 +52,16 @@ IConsole::setCursorVisible(bool visible) {
 // -------------------------------------------------------------------------------------------------
 
 void
-IConsole::putChar(uint32_t x, uint32_t y, const DrawableChar& ch) {
-    doPutChar(x, y, ch);
+IConsole::putChar(const Vec2<size_t>& pos, const DrawableChar& ch) {
+    doPutChar(pos, ch);
 }
 
+// -------------------------------------------------------------------------------------------------
+
+DrawableChar
+IConsole::getChar(const Vec2<size_t>& pos) const {
+    return doGetChar(pos);
+}
 
 // -------------------------------------------------------------------------------------------------
 

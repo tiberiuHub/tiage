@@ -5,6 +5,7 @@
 #include "tiage/IConsole.h"
 #include "tiage/Matrix.h"
 #include "tiage/Sprite.h"
+#include "tiage/Object.h"
 #include <functional>
 #include <cmath>
 
@@ -18,8 +19,6 @@ public:
 	void clear();
 
 	void present(IConsole& console, const V2i32& offset = { 0,0 });
-
-	void clearLayer(uint32_t layerZ);
 
 	void changeZ(uint32_t layerZ);
 
@@ -35,13 +34,16 @@ public:
 
 	void drawCircle(const DrawableChar& chr, const V2i32& origin, uint32_t radius, bool filled = false);
 
-	void drawString(const V2i32& pos, const std::string& string, Color foregCol, Color backgCol);
+	void drawString(const V2i32& pos, const std::string& string, Color foregCol = Color::kWhite, Color backgCol = Color::kBlack);
 
 	void drawSprite(const V2i32& pos, const Sprite& sprite);
+
+	void drawObject(const V2i32& pos, const Object& object);
 
 private:
 
 	struct cmd_t {
+		uint32_t z;
 		Vec2<size_t> pos;
 		DrawableChar chr;
 	};
@@ -54,7 +56,7 @@ private:
 
 	uint32_t currentZ;
 
-	std::vector<std::vector<cmd_t>> layers;
+	std::vector<cmd_t>layers;
 
 };
 

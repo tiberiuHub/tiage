@@ -61,7 +61,9 @@ private:
 
 	void doSetCursorVisible(bool visible) override;
 
-	void doPutChar(uint32_t x, uint32_t y, const DrawableChar& ch) override;
+	void doPutChar(const Vec2<size_t>& pos, const DrawableChar& ch) override;
+
+	DrawableChar doGetChar(const Vec2<size_t>& pos) const override;
 
 	void doFlush(const V2i32& offset) override;
 

@@ -57,7 +57,9 @@ public:
 
     void setCursorVisible(bool visible);
 
-    void putChar(uint32_t x, uint32_t y,const DrawableChar& ch);
+    void putChar(const Vec2<size_t>& pos, const DrawableChar& ch);
+
+    DrawableChar getChar(const Vec2<size_t>& pos) const;
 
     void flush(const V2i32& offset = {0,0});
     
@@ -80,7 +82,9 @@ protected:
 
     virtual void doSetCursorVisible(bool visible) = 0;
 
-    virtual void doPutChar(uint32_t x, uint32_t y,const DrawableChar& ch) = 0;
+    virtual void doPutChar(const Vec2<size_t>& pos, const DrawableChar& ch) = 0;
+
+    virtual DrawableChar doGetChar(const Vec2<size_t>& pos) const = 0;
 
     virtual void doFlush(const V2i32& offset) = 0;
 

@@ -24,6 +24,20 @@ Sprite::setSize(Vec2<size_t> newSize) {
 
 // -------------------------------------------------------------------------------------------------
 
+V2i32 
+Sprite::getOffset() const {
+	return offset_;
+}
+
+// -------------------------------------------------------------------------------------------------
+
+void
+Sprite::setOffset(const V2i32& newOffset) {
+	offset_ = newOffset;
+}
+
+// -------------------------------------------------------------------------------------------------
+
 DrawableChar 
 Sprite::getChar(Vec2<size_t> pos) const {
 	return data_.get(pos);

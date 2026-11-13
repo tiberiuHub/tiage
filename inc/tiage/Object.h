@@ -3,7 +3,7 @@
 #pragma once
 
 #include <tiage/Sprite.h>
-#include <tiage/HitMatrix.h>
+#include <tiage/Hitbox.h>
 #include <optional>
 
 namespace tiage {
@@ -11,19 +11,19 @@ namespace tiage {
 class Object {
 public:
 
-	Object(Vec2<int32_t>pos, int32_t zOrder = 0, std::optional<HitMatrix> hitbox = std::nullopt, std::optional<Sprite> sprite = std::nullopt);
+	Object(std::optional<Hitbox> hitbox = std::nullopt, std::optional<Sprite> sprite = std::nullopt, V2i32 pos = {0,0}, int32_t zOrder = 0);
 
-	void setPos(const Vec2<int32_t>& pos);
+	void setPos(const V2i32& pos);
 
 	void setSprite(const std::optional <Sprite>& sprite);
 
-	void setHitbox(const std::optional <HitMatrix>& hitbox);
+	void setHitbox(const std::optional <Hitbox>& hitbox);
 
 	void setZOrder(int32_t zOrder);
 
-	const HitMatrix* hitbox() const;
+	const Hitbox* hitbox() const;
 
-	const Vec2<int32_t> pos() const;
+	const V2i32 pos() const;
 
 	const Sprite* sprite() const;
 
@@ -35,9 +35,9 @@ public:
 
 private:
 
-	std::optional <HitMatrix> hitbox_;
+	std::optional <Hitbox> hitbox_;
 
-	Vec2<int32_t> pos_;
+	V2i32 pos_;
 
 	std::optional <Sprite> sprite_;
 

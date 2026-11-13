@@ -6,7 +6,7 @@ namespace tiage {
 
 // -------------------------------------------------------------------------------------------------
 
-Object::Object(Vec2<int32_t>pos, int32_t zOrder, std::optional<HitMatrix> hitbox, std::optional<Sprite> sprite):
+Object::Object(std::optional<Hitbox> hitbox, std::optional<Sprite> sprite, V2i32 pos, int32_t zOrder):
 	pos_(pos),
 	zOrder_(zOrder),
 	hitbox_(hitbox),
@@ -16,7 +16,7 @@ Object::Object(Vec2<int32_t>pos, int32_t zOrder, std::optional<HitMatrix> hitbox
 // -------------------------------------------------------------------------------------------------
 
 void 
-Object::setPos(const Vec2<int32_t>& pos) {
+Object::setPos(const V2i32& pos) {
 	pos_ = pos;
 }
 
@@ -30,7 +30,7 @@ Object::setSprite(const std::optional <Sprite>& sprite) {
 // -------------------------------------------------------------------------------------------------
 
 void 
-Object::setHitbox(const std::optional <HitMatrix>& hitbox) {
+Object::setHitbox(const std::optional <Hitbox>& hitbox) {
 	hitbox_ = hitbox;
 }
 
@@ -43,7 +43,7 @@ Object::setZOrder(int32_t zOrder) {
 
 // -------------------------------------------------------------------------------------------------
 
-const HitMatrix*
+const Hitbox*
 Object::hitbox() const {
 	if (hasHitbox()) {
 		return &*hitbox_;

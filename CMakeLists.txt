@@ -44,6 +44,8 @@ add_library(${TARGET}
 		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/IMouse.h"
 		"${CMAKE_CURRENT_SOURCE_DIR}/src/WinMouse.cpp"
 		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/WinMouse.h"	
+		"${CMAKE_CURRENT_SOURCE_DIR}/src/Time.cpp"
+		"${CMAKE_CURRENT_SOURCE_DIR}/inc/tiage/Time.h"	
 )
 
 target_include_directories(${TARGET}       

@@ -15,6 +15,10 @@ public:
 
 	void setSize(Vec2<size_t> newSize);
 
+	V2i32 getOffset() const;
+
+	void setOffset(const V2i32& newOffset);
+
 	DrawableChar getChar(Vec2<size_t> pos) const;
 
 	 void setChar(Vec2<size_t> pos, const DrawableChar& c);
@@ -26,6 +30,8 @@ public:
 	 void parseFromFile(const std::string& path);
 
 private:
+
+	V2i32 offset_;
 
 	Matrix<DrawableChar> data_;
 

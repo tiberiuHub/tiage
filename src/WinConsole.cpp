@@ -185,8 +185,15 @@ WinConsole::doSetCursorVisible(bool visible) {
 // -------------------------------------------------------------------------------------------------
 
 void
-WinConsole::doPutChar(uint32_t x, uint32_t y, const DrawableChar& ch) {
-	buffer_.set({x, y}, ch);
+WinConsole::doPutChar(const Vec2<size_t>& pos, const DrawableChar& ch) {
+	buffer_.set(pos, ch);
+}
+
+// -------------------------------------------------------------------------------------------------
+
+DrawableChar
+WinConsole::doGetChar(const Vec2<size_t>& pos) const {
+	return buffer_.get(pos);
 }
 
 // -------------------------------------------------------------------------------------------------

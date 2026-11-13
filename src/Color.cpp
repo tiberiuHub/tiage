@@ -265,8 +265,10 @@ colFromString(std::string str) {
 
     if (values.size() == 3) {
         return Color(values[0], values[1], values[2]);
+    } else if (values.size() == 4) {
+        return Color(values[0], values[1], values[2], values[3]);
     } else {
-        throw std::runtime_error("String must have exactly 3 values for RGB");//Alpha not implemented yet and probably never will be
+        throw std::runtime_error("String must have exactly 3 values for RGB");
     }
 }
 
@@ -291,6 +293,34 @@ Color::operator== (const Color& other) const {
 bool
 Color::operator!= (const Color& other) const {
 	return (this->rgba() != other.rgba());
+}
+
+// --------------------------------------------------------------------------------------------------
+
+Color
+Color::operator* (uint8_t factor) const {
+    Color result;
+
+    result.setR((r() * factor) / 255);
+    result.setG((g() * factor) / 255);
+    result.setB((b() * factor) / 255);
+    result.setA(a());
+
+    return result;
+}
+
+// --------------------------------------------------------------------------------------------------
+
+Color 
+Color::operator+(const Color& other) const {
+    Color result;
+
+    result.setR(std::min(255, r() + other.r()));
+    result.setG(std::min(255, g() + other.g()));
+    result.setB(std::min(255, b() + other.b()));
+    result.setA(std::min(255, a() + other.a()));
+
+    return result;
 }
 
 // --------------------------------------------------------------------------------------------------
